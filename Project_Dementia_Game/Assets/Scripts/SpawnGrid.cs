@@ -13,7 +13,10 @@ public class SpawnGrid : MonoBehaviour
     public int gridSize = 3;
 
     // Random Based Nodes
-    public int numberNodes = 9;
+    public int numberNodes = 25;
+    public float nodeGap = 0.85f;
+    public float generateWidth = 2.0f;
+    public float generateHeight = 4.0f;
 
 
     private GameObject[] nodes;
@@ -38,30 +41,37 @@ public class SpawnGrid : MonoBehaviour
     }
 
     // Node generation checker to determine the rules to avoid overlapping circles and also trail making viable positions
-    private Vector2[] generateNodeCoordinates(int randomRange)
+    private Vector2[] generateNodeCoordinates()
     {
-        float xCoor = 0;
-        float yCoor = 0;
+        float xCoor = 0f;
+        float yCoor = 0f;
         bool isExist;
         Vector2[] nodePos = new Vector2[numberNodes];
+        int counter = 1000;
 
         for (int j = 0; j < numberNodes; j++) 
         {
 
             do
             {
-                xCoor = Random.Range(-randomRange, randomRange);
-                yCoor = Random.Range(-randomRange, randomRange);
+                xCoor = Random.Range(-generateWidth, generateWidth);
+                yCoor = Random.Range(-generateHeight, generateHeight);
                 isExist = false;
                 for (int i = 0; i < numberNodes; i++)
                 {
-                    if (nodePos[i].x == xCoor && nodePos[i].y == yCoor)
+                    if (xCoor <= nodePos[i].x + nodeGap && xCoor >= nodePos[i].x - nodeGap &&
+                        yCoor <= nodePos[i].y + nodeGap && yCoor >= nodePos[i].y - nodeGap)
                     {
                         isExist = true;
                     }
                 }
-            } while (isExist);
 
+                counter--;
+                if (counter == 0) {
+                    Debug.Log("Broke");
+                }
+            } while (isExist && counter > 0);
+            counter = 1000;
             nodePos[j].x = xCoor;
             nodePos[j].y = yCoor;
         }
@@ -70,12 +80,19 @@ public class SpawnGrid : MonoBehaviour
     }
 
     // Generate nodes on screen
-    private void generateNodesOnRandom()
+    public void generateNodesOnRandom()
     {
-        nodes = new GameObject[numberNodes];
 
-        int randomRange = numberNodes / 2 - 1;
-        Vector2[] nodeCoor = generateNodeCoordinates(randomRange);
+        if (nodes[0] != null)
+        {
+            foreach(GameObject n in nodes)
+            {
+                Destroy(n);
+            }
+            nodes = new GameObject[numberNodes];
+        }
+
+        Vector2[] nodeCoor = generateNodeCoordinates();
 
         int nodeCounter = 0;
         for (int nodesCount = 0; nodesCount < numberNodes; nodesCount++)
@@ -91,6 +108,7 @@ public class SpawnGrid : MonoBehaviour
     void Start()
     {
         collider2D = new Collider2D();
+        nodes = new GameObject[numberNodes];
         generateNodesOnRandom();
     }
 
