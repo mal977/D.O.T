@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SpawnGrid : MonoBehaviour
+public class GenerateNodes : MonoBehaviour
 {
     public GameObject nodePrefab;
+    public GameObject testManager;
 
     // Grid Based Nodes
     public int rowGap = 5;
@@ -13,32 +14,32 @@ public class SpawnGrid : MonoBehaviour
     public int gridSize = 3;
 
     // Random Based Nodes
-    public int numberNodes = 25;
     public float nodeGap = 0.85f;
     public float generateWidth = 2.0f;
     public float generateHeight = 4.0f;
 
 
-    private GameObject[] nodes;
-    private Collider2D collider2D;
+    public GameObject[] nodes;
+
+    private int numberNodes;
 
     // Placeholder Node generation based on grid system for trail making test
-    private void generateNodesOnGrid()
-    {
-        nodes = new GameObject[gridSize * gridSize];
-        int centerOffset = gridSize / 2;
-        int nodeCounter = 0;
-        for (int row = 0; row < gridSize; row++)
-        {
-            for (int col = 0; col < gridSize; col++)
-            {
-                nodes[nodeCounter] = Instantiate(nodePrefab, new Vector3((col - centerOffset) * colGap, (-(row - centerOffset)) * rowGap, 0), Quaternion.identity);
-                nodes[nodeCounter].name = "node x: " + (col - centerOffset) + "/y: " + (row - centerOffset);
-                nodes[nodeCounter].transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "" + (nodeCounter + 1);
-                nodeCounter++;
-            }
-        }
-    }
+    //private void generateNodesOnGrid()
+    //{
+    //    nodes = new GameObject[gridSize * gridSize];
+    //    int centerOffset = gridSize / 2;
+    //    int nodeCounter = 0;
+    //    for (int row = 0; row < gridSize; row++)
+    //    {
+    //        for (int col = 0; col < gridSize; col++)
+    //        {
+    //            nodes[nodeCounter] = Instantiate(nodePrefab, new Vector3((col - centerOffset) * colGap, (-(row - centerOffset)) * rowGap, 1.0f), Quaternion.identity);
+    //            nodes[nodeCounter].name = "node " + nodeCounter;
+    //            nodes[nodeCounter].transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "" + (nodeCounter + 1);
+    //            nodeCounter++;
+    //        }
+    //    }
+    //}
 
     // Node generation checker to determine the rules to avoid overlapping circles and also trail making viable positions
     private Vector2[] generateNodeCoordinates()
@@ -97,9 +98,11 @@ public class SpawnGrid : MonoBehaviour
         int nodeCounter = 0;
         for (int nodesCount = 0; nodesCount < numberNodes; nodesCount++)
         {
-            nodes[nodeCounter] = Instantiate(nodePrefab, new Vector3(nodeCoor[nodesCount].x, nodeCoor[nodesCount].y, 0), Quaternion.identity);
-            nodes[nodeCounter].name = "node x: " + nodeCoor[nodesCount].x + "/y: " + nodeCoor[nodesCount].y;
+            nodes[nodeCounter] = Instantiate(nodePrefab, new Vector3(nodeCoor[nodesCount].x, nodeCoor[nodesCount].y, 1.0f), Quaternion.identity);
+            nodes[nodeCounter].name = "" + (nodeCounter+1);
             nodes[nodeCounter].transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "" + (nodeCounter + 1);
+            nodes[nodeCounter].transform.parent = gameObject.transform;
+            nodes[nodeCounter].AddComponent<OnNodeTouch>();
             nodeCounter++;
         }
     }
@@ -107,8 +110,9 @@ public class SpawnGrid : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        collider2D = new Collider2D();
+        numberNodes = testManager.GetComponent<TMT_Manager>().numberNodes;
         nodes = new GameObject[numberNodes];
+        testManager.GetComponent<TMT_Manager>();
         generateNodesOnRandom();
     }
 
