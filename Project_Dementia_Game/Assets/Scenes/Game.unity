@@ -150,15 +150,15 @@ RectTransform:
   m_GameObject: {fileID: 96674556}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5.1774, y: 5.1774, z: 5.1774}
+  m_LocalScale: {x: 1.6981543, y: 1.6981543, z: 1.6981543}
   m_Children: []
   m_Father: {fileID: 348102363}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 8, y: 7.2249756}
-  m_SizeDelta: {x: 160, y: 53.549988}
+  m_AnchoredPosition: {x: 8, y: 7.2250977}
+  m_SizeDelta: {x: 723.1, y: 156.3}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &96674558
 MonoBehaviour:
@@ -182,11 +182,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 59
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 71
     m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -252,10 +252,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1440, y: 2960}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -365,11 +365,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 166
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 166
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -412,15 +412,15 @@ RectTransform:
   m_GameObject: {fileID: 1048306996}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.3042173, y: 3.3042173, z: 3.3042173}
+  m_LocalScale: {x: 0.6918713, y: 0.6918713, z: 0.6918713}
   m_Children: []
   m_Father: {fileID: 348102363}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -39}
-  m_SizeDelta: {x: 224.4, y: 47.3}
+  m_AnchoredPosition: {x: 0, y: -14}
+  m_SizeDelta: {x: 1078.6, y: 259.5}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1048306998
 MonoBehaviour:
@@ -444,11 +444,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 25
+    m_FontSize: 135
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 49
+    m_MaxSize: 143
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -475,12 +475,12 @@ GameObject:
   - component: {fileID: 1091631451}
   - component: {fileID: 1091631450}
   m_Layer: 0
-  m_Name: GridManager
+  m_Name: NodeGenerationManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1091631450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -498,9 +498,9 @@ MonoBehaviour:
   colGap: 1
   gridSize: 5
   numberNodes: 25
-  nodeGap: 0.85
+  nodeGap: 0.7
   generateWidth: 2
-  generateHeight: 4
+  generateHeight: 3.5
 --- !u!4 &1091631451
 Transform:
   m_ObjectHideFlags: 0
@@ -617,7 +617,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 0}
+  m_BackGroundColor: {r: 0.098122105, g: 0.990566, b: 0.5522984, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -634,7 +634,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 4.77
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -664,6 +664,54 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1692551594
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1692551597}
+  - component: {fileID: 1692551595}
+  m_Layer: 0
+  m_Name: LineManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1692551595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692551594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55c46ef8ec8ec5147a562b348bec5c45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineStartWidth: 0.02
+  lineEndWidth: 0.02
+  lineMat: {fileID: 2100000, guid: 25ae067df54232a4c8a1932cf9bf8690, type: 2}
+  lineDist: 1
+  lineInterval: 0.5
+--- !u!4 &1692551597
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692551594}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1712304165
 GameObject:
   m_ObjectHideFlags: 0
@@ -692,7 +740,7 @@ RectTransform:
   m_GameObject: {fileID: 1712304165}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.6405644, y: 3.6405644, z: 3.6405644}
+  m_LocalScale: {x: 0.48220593, y: 0.48220593, z: 0.48220593}
   m_Children:
   - {fileID: 872088694}
   m_Father: {fileID: 348102363}
@@ -700,8 +748,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1232}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 0, y: 1241}
+  m_SizeDelta: {x: 986, y: 198.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1712304167
 MonoBehaviour:

@@ -115,18 +115,6 @@ public class SpawnGrid : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-            if(touch.phase == TouchPhase.Began)
-            {
-                Vector2 pos = touch.position;
-                Debug.Log(pos);
-                //if (collider2D.OverlapPoint(Camera.main.ScreenToWorldPoint(pos)))
-                //{
-                //    Debug.Log("Hello");
-                //}
-            }
-        }    
+        
     }
 }
