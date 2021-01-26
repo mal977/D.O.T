@@ -42,7 +42,6 @@ public class TMT_Manager : MonoBehaviour
 
     public void ExitApp()
     {
-        UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();
     }
 
