@@ -13,8 +13,8 @@ public class DrawLine : MonoBehaviour
 
     private Vector3 startLinePos;
 
-    public float lineDist = 1f;
     public float lineInterval = 0.5f;
+    private float timer = 0.0f;
 
     private float currentLineDist;
 
@@ -23,7 +23,6 @@ public class DrawLine : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentLineDist = lineDist;
         allLines = new List<GameObject>();
     }
 
@@ -63,6 +62,7 @@ public class DrawLine : MonoBehaviour
     {
         if (Input.touchCount > 0)
         {
+            timer += Time.deltaTime;
             Touch touch = Input.GetTouch(0);
             if (touch.phase == TouchPhase.Began) 
             {
@@ -70,15 +70,11 @@ public class DrawLine : MonoBehaviour
             }
             if (touch.phase == TouchPhase.Moved)
             {
-                if (currentLineDist > 0)
-                {
-                    currentLineDist -= lineInterval;
-                }
-                else
+                if (timer > lineInterval)
                 {
                     createNewLine(touch);
                     startLinePos = GetTouchPosition(touch);
-                    currentLineDist = lineDist;
+                    timer = 0.0f;
                 }
             }
         }
