@@ -61,11 +61,11 @@ public class TMT_Manager : MonoBehaviour
             {
                 timer += Time.deltaTime;
             }
-            scoreText.text = 
-                "Accuracy: " + Mathf.Round(calculateAccuracy() * 100.0f) / 100.0f + 
-                "%\nScore: " + score + "\nMistakes: " + mistakes +
-                "\nTimer: " + Mathf.Round(timer * 100.0f) / 100.0f + "s";
         }
+        scoreText.text =
+            "Accuracy: " + Mathf.Round(calculateAccuracy() * 100.0f) / 100.0f +
+            "%\nScore: " + score + "\nMistakes: " + mistakes +
+            "\nTimer: " + Mathf.Round(timer * 100.0f) / 100.0f + "s";
 
     }
 }
