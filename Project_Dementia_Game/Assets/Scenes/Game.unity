@@ -727,6 +727,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numberNodes: 15
   scoreText: {fileID: 96674558}
+  nodesMissed: 
+  nodesHit: 
 --- !u!1 &1091631449
 GameObject:
   m_ObjectHideFlags: 0
@@ -758,12 +760,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodePrefab: {fileID: 4892880853128676433, guid: ca1352cba8265fd4399ab60330b08ab9, type: 3}
   testManager: {fileID: 1073746978}
-  rowGap: 5
-  colGap: 5
-  gridSize: 3
-  nodeGap: 0.7
+  nodeGap: 0.5
   generateWidth: 1.8
   generateHeight: 2.8
+  nodeScale: 0.6
+  maxTimeInNode: 0.1
   nodes: []
 --- !u!4 &1091631451
 Transform:
