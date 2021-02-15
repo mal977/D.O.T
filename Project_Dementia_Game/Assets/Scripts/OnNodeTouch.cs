@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class OnNodeTouch : MonoBehaviour
 {
-    private Collider2D collider;
     private bool allowEntry = true;
+    private float timerInNode = 0.0f;
 
     // Start is called before the first frame update
     void Start()
     {
-        collider = gameObject.GetComponent<Collider2D>();
+        
     }
 
     private Vector3 GetTouchPosition(Touch touch)
@@ -20,25 +20,34 @@ public class OnNodeTouch : MonoBehaviour
         return new Vector3(currentTouch.x, currentTouch.y, 0);
     }
 
+    private TMT_Manager getTestManager()
+    {
+        return gameObject.transform.parent.GetComponent<GenerateNodes>().testManager.GetComponent<TMT_Manager>();
+    }    
+
     // Update is called once per frame
     void Update()
     {
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
-            if (touch.phase == TouchPhase.Began || touch.phase == TouchPhase.Moved)
+            if (GetComponent<Collider2D>() == Physics2D.OverlapPoint(GetTouchPosition(touch)))
             {
-                if (collider == Physics2D.OverlapPoint(GetTouchPosition(touch)))
+                timerInNode += Time.deltaTime;
+                if (allowEntry)
                 {
-                    if (allowEntry)
+                    if (timerInNode >= getTestManager().maxTimeInNode)
                     {
-                        gameObject.transform.parent.GetComponent<GenerateNodes>().testManager.GetComponent<TMT_Manager>().NotifyNodeHit(int.Parse(gameObject.name));
+                        getTestManager().NotifyNodeHit(int.Parse(gameObject.name), timerInNode);
+                        //Debug.Log("Time taken in Node:" + timerInNode);
+                        timerInNode = 0.0f;
                         allowEntry = false;
                     }
                 }
-                else {
-                    allowEntry = true;
-                }
+            }
+            else
+            {
+                allowEntry = true;
             }
         }
     }
