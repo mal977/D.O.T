@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
+using Unity.Notifications.Android;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AndroidPluginTest : MonoBehaviour
 {
@@ -9,6 +12,7 @@ public class AndroidPluginTest : MonoBehaviour
     static AndroidJavaClass pluginClass;
     static AndroidJavaObject pluginInstance;
 
+    public Button btn;
     public static AndroidJavaClass PluginClass
     {
         get
@@ -16,6 +20,9 @@ public class AndroidPluginTest : MonoBehaviour
             if(pluginClass == null)
             {
                 pluginClass = new AndroidJavaClass(pluginName);
+                AndroidJavaClass playerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+                AndroidJavaObject activity = playerClass.GetStatic<AndroidJavaObject>("currentActivity");
+                pluginClass.SetStatic<AndroidJavaObject>("mainActivity", activity);
             }
             return pluginClass;
         }
@@ -37,6 +44,26 @@ public class AndroidPluginTest : MonoBehaviour
     void Start()
     {
         Debug.Log("Elapsed Time: " + getElapsedTime());
+        btn.onClick.AddListener(showNotification);
+    }
+
+    void showNotification()
+    {
+        var c = new AndroidNotificationChannel()
+        {
+            Id = "channel_id",
+            Name = "Default Channel",
+            Importance = Importance.High,
+            Description = "Generic notifications",
+        };
+        AndroidNotificationCenter.RegisterNotificationChannel(c);
+
+        var notification = new AndroidNotification();
+        notification.Title = "SomeTitle";
+        notification.Text = "SomeText";
+        notification.FireTime = System.DateTime.Now.AddSeconds(5);
+
+        AndroidNotificationCenter.SendNotification(notification, "channel_id");
     }
 
     float elapsedTime = 0;
@@ -60,4 +87,6 @@ public class AndroidPluginTest : MonoBehaviour
         Debug.LogWarning("Wrong Platform");
         return 0;
     }
+
+
 }
