@@ -19,3 +19,4 @@ MonoBehaviour:
   option2: Cat
   option3: Rat
   option4: Wolf
+  correctOption: 1

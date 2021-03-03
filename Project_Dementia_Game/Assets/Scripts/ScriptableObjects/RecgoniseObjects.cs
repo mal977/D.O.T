@@ -17,7 +17,9 @@ public class RecgoniseObjects : ScriptableObject
     [SerializeField]
     private string option3;
     [SerializeField]
-    private string option4;
+    private string option4;    
+    [SerializeField]
+    private int correctOption;
 
     public string objectName
     {
@@ -67,6 +69,13 @@ public class RecgoniseObjects : ScriptableObject
         get
         {
             return option4;
+        }
+    } 
+    public int getCorrectOption
+    {
+        get
+        {
+            return correctOption;
         }
     }
 }

@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c488c525618f3b348ad6c6b383aacf44, type: 3}
-  m_Name: Dog
+  m_Name: Toaster
   m_EditorClassIdentifier: 
-  ObjectName: Dog
-  ObjectDescription: This is a dog
-  objectIcon: {fileID: 21300000, guid: af7e4c5de06d5f74b92e50212886c4c3, type: 3}
-  option1: Bird
-  option2: Rabbit
-  option3: Pig
-  option4: Dog
-  correctOption: 3
+  ObjectName: Toaster
+  ObjectDescription: A grey toaster
+  objectIcon: {fileID: 21300000, guid: 28fb954d51edb8545843542cb153718d, type: 3}
+  option1: Washing Maching
+  option2: Car
+  option3: Microwave
+  option4: Toaster
+  correctOption: 0
