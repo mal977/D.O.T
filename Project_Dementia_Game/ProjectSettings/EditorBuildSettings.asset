@@ -11,4 +11,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: 88b688c1958602341ab94e06d7143939
+  - enabled: 0
+    path: Assets/Scenes/MalcomTestingScene.unity
+    guid: c15c1861654434046ad5ca6b9f3e0641
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: c66236808083e7b41a2eb312b256965f
+  - enabled: 1
+    path: Assets/Scenes/RecgoniseGameScene.unity
+    guid: c669a76f086c1544ca8f55887b403e71
   m_configObjects: {}
