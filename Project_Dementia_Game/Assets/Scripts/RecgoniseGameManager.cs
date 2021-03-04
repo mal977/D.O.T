@@ -25,20 +25,30 @@ public class RecgoniseGameManager : MonoBehaviour
     [SerializeField]
     private int numberOfRounds = 2;
     [SerializeField]
-    private float secondsPerRound = 30f;
+    private float secondsPerRound = 30f;  
+    [SerializeField]
+    private float lagTimeBetweenRound = 3f;
 
     // Sending Variables
-    private int mistakes = 0;
-    private int score = 0;
-    private long timeTaken = 0;
-    private string dateTimeCompleted = "";
+    private RecgoniseTestData sendingTestData;
 
     private long startTime = 0;
     private Boolean timer = false;
     private float timeAmount = 0;
 
+    private TestManagerScript tms;
     void Start()
     {
+
+        if(tms == null)
+        {
+            tms = TestManagerScript.GetInstance();
+        }
+
+        if(sendingTestData == null)
+        {
+            sendingTestData = new RecgoniseTestData();
+        }
 
         spriteRender = spriteObject.GetComponent<Image>();
 
@@ -73,7 +83,7 @@ public class RecgoniseGameManager : MonoBehaviour
 
     void StartGame()
     {
-        startTime = System.DateTime.Now.Millisecond;
+        startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         if (numberOfRounds > 0)
         {
             numberOfRounds--;
@@ -84,25 +94,41 @@ public class RecgoniseGameManager : MonoBehaviour
 
     void EndGame()
     {
-        long endTime = System.DateTime.Now.Millisecond;
-        timeTaken = endTime - startTime;
+        long endTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+        sendingTestData.TimeTaken = endTime - startTime;
+        sendingTestData.DateTimeCompleted = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        
+        Debug.Log("Button clicked:" + DateTimeOffset.Now.ToUnixTimeMilliseconds());
+        tms.AddTestData(sendingTestData);
     }
 
     void PopulateNewObject(RecgoniseObjects recgoniseObjects)
     {
-        spriteRender.sprite = recgoniseObjects.Icon;
-        btn0Object.transform.GetChild(0).GetComponent<Text>().text = recgoniseObjects.optionOne;
-        btn1Object.transform.GetChild(0).GetComponent<Text>().text = recgoniseObjects.optionTwo;
-        btn2Object.transform.GetChild(0).GetComponent<Text>().text = recgoniseObjects.optionThree;
-        btn3Object.transform.GetChild(0).GetComponent<Text>().text = recgoniseObjects.optionFour;
+        spriteRender.sprite = recgoniseObjects.ObjectIcon;
+        btn0Object.transform.GetChild(0).GetComponent<Text>().text = recgoniseObjects.Option1;
+        btn1Object.transform.GetChild(0).GetComponent<Text>().text = recgoniseObjects.Option2;
+        btn2Object.transform.GetChild(0).GetComponent<Text>().text = recgoniseObjects.Option3;
+        btn3Object.transform.GetChild(0).GetComponent<Text>().text = recgoniseObjects.Option4;
+
+        btn0Object.GetComponent<Button>().interactable = true;
+        btn1Object.GetComponent<Button>().interactable = true;
+        btn2Object.GetComponent<Button>().interactable = true;
+        btn3Object.GetComponent<Button>().interactable = true;
     }
 
     void BtnOnClick(int number)
     {
         Debug.Log("Button clicked:" + number);
-        if(number == currentRecgoniseObject.getCorrectOption)
+        btn0Object.GetComponent<Button>().interactable = false;
+        btn1Object.GetComponent<Button>().interactable = false;
+        btn2Object.GetComponent<Button>().interactable = false;
+        btn3Object.GetComponent<Button>().interactable = false; 
+       
+        if (number == currentRecgoniseObject.CorrectOption)
         {
             Debug.Log("Correct Answer!");
+            sendingTestData.Score++;
             resultText.GetComponent<Text>().text = "Correct Answer!";
             resultText.SetActive(true);
             endCurrentRound();
@@ -110,6 +136,7 @@ public class RecgoniseGameManager : MonoBehaviour
         else
         {
             Debug.Log("Wrong Answer!");
+            sendingTestData.Errors++;
             resultText.GetComponent<Text>().text = "Wrong Answer!";
             resultText.SetActive(true);
             endCurrentRound();
@@ -129,7 +156,7 @@ public class RecgoniseGameManager : MonoBehaviour
     IEnumerator DelayStartNewRound()
     {
       
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(lagTimeBetweenRound);
         StartNewRound();
     }
     // Update is called once per frame

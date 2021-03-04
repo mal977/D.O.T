@@ -21,61 +21,12 @@ public class RecgoniseObjects : ScriptableObject
     [SerializeField]
     private int correctOption;
 
-    public string objectName
-    {
-        get
-        {
-            return objectName;
-        }
-    }
-
-    public string objectDescription
-    {
-        get
-        {
-            return objectDescription;
-        }
-    }
-    public Sprite Icon
-    {
-        get
-        {
-            return objectIcon;
-        }
-    }
-    public string optionOne
-    {
-        get
-        {
-            return option1;
-        }
-    }
-    public string optionTwo
-    {
-        get
-        {
-            return option2;
-        }
-    }
-    public string optionThree
-    {
-        get
-        {
-            return option3;
-        }
-    }
-    public string optionFour
-    {
-        get
-        {
-            return option4;
-        }
-    } 
-    public int getCorrectOption
-    {
-        get
-        {
-            return correctOption;
-        }
-    }
+    public string ObjectName1 { get => ObjectName; set => ObjectName = value; }
+    public string ObjectDescription1 { get => ObjectDescription; set => ObjectDescription = value; }
+    public Sprite ObjectIcon { get => objectIcon; set => objectIcon = value; }
+    public string Option1 { get => option1; set => option1 = value; }
+    public string Option2 { get => option2; set => option2 = value; }
+    public string Option3 { get => option3; set => option3 = value; }
+    public string Option4 { get => option4; set => option4 = value; }
+    public int CorrectOption { get => correctOption; set => correctOption = value; }
 }

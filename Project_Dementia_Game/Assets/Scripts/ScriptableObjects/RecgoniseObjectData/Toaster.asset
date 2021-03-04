@@ -19,4 +19,4 @@ MonoBehaviour:
   option2: Car
   option3: Microwave
   option4: Toaster
-  correctOption: 0
+  correctOption: 3
