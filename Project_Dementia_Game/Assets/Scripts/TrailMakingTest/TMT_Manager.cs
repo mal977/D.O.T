@@ -22,7 +22,6 @@ public class TMT_Manager : MonoBehaviour
     public List<int> nodesHit;
 
 
-
     private float calculateAccuracy() 
     {
         if (nodesMissed.Count > score)
