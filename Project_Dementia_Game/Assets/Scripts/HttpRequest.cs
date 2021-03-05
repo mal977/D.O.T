@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -24,16 +25,18 @@ public class HttpRequest : MonoBehaviour
     }
 
 
-    private IEnumerator GetRequest(string url)
-    { 
-        using(UnityWebRequest webRequest = UnityWebRequest.Get(url))
+    public async void GetRequest(string url)
+    {
+        UnityWebRequestAsyncOperation asyncRequest;
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
         {
             // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
-
+            asyncRequest = webRequest.SendWebRequest();
+            while (!asyncRequest.isDone)
+                await Task.Delay(100);
             string[] pages = url.Split('/');
             int page = pages.Length - 1;
-
+            Debug.Log(asyncRequest.ToString());
             if (webRequest.isNetworkError)
             {
                 Debug.Log(pages[page] + ": Error: " + webRequest.error);
@@ -41,9 +44,10 @@ public class HttpRequest : MonoBehaviour
             else
             {
                 Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
-                yield return webRequest.downloadHandler.text;
+                //return webRequest.downloadHandler.text;
             }
         }
+        //return "";
     }
     public string GetData(string url)
     {
@@ -53,7 +57,7 @@ public class HttpRequest : MonoBehaviour
 
     public void UploadTest()
     {
-        StartCoroutine(Upload());
+        Upload();
     }
 
     private UnityWebRequest CreateSendRequest(string url, string data)
@@ -70,11 +74,11 @@ public class HttpRequest : MonoBehaviour
         return request;
     }
 
-    IEnumerator Upload()
+    void Upload()
     {
         requestSender = CreateSendRequest(postURL, testData);
 
-        yield return requestSender.SendWebRequest();
+        requestSender.SendWebRequest();
 
         if (requestSender.isNetworkError || requestSender.isHttpError)
         {
