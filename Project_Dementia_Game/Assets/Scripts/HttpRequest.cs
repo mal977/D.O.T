@@ -8,59 +8,54 @@ using UnityEngine.Networking;
 
 public class HttpRequest : MonoBehaviour
 {
+    // TODO: Change to TestData Object
     public TestDataPlaceHolder pH;
     public string testData;
-    private string postURL = "http://localhost:8000/testServer/example/";
     private UnityWebRequest requestSender;
-    //private string 
+    private UnityWebRequestAsyncOperation asyncRequest;
 
     public string getURL = "www.google.com";
+    private string hostURL = "localhost:8000";
 
     void Start()
     {
         // TODO: To be removed
-        pH = new TestDataPlaceHolder();
-        testData = JsonParser(pH);
+        //pH = new TestDataPlaceHolder();
+        // JSON Parser for parsing objects into json <== Reference
+        testData = Utility.JsonParser(pH);
         // END TODO
     }
 
 
-    public async void GetRequest(string url)
+    public async Task<string> GetRequest(string urlPath)
     {
-        UnityWebRequestAsyncOperation asyncRequest;
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(url))
+        // Merge hostURL with path
+        string getterURL = hostURL + urlPath;
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(getterURL))
         {
             // Request and wait for the desired page.
             asyncRequest = webRequest.SendWebRequest();
             while (!asyncRequest.isDone)
                 await Task.Delay(100);
-            string[] pages = url.Split('/');
+            // To be updated to parse the format from the API
+            string[] pages = getterURL.Split('/');
             int page = pages.Length - 1;
-            Debug.Log(asyncRequest.ToString());
+
             if (webRequest.isNetworkError)
             {
                 Debug.Log(pages[page] + ": Error: " + webRequest.error);
+                return webRequest.error;
             }
             else
             {
                 Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
-                //return webRequest.downloadHandler.text;
+                return webRequest.downloadHandler.text;
             }
         }
-        //return "";
-    }
-    public string GetData(string url)
-    {
-        GetRequest(postURL);
-        return "";
     }
 
-    public void UploadTest()
-    {
-        Upload();
-    }
-
-    private UnityWebRequest CreateSendRequest(string url, string data)
+    private UnityWebRequest CreateWebSender(string url, string data)
     {
 
         UnityWebRequest request = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPOST);
@@ -74,11 +69,16 @@ public class HttpRequest : MonoBehaviour
         return request;
     }
 
-    void Upload()
+    public async Task<string> Upload(string urlPath, string testData)
     {
-        requestSender = CreateSendRequest(postURL, testData);
+        // Merge hostURL with path
+        string getterURL = hostURL + urlPath;
 
-        requestSender.SendWebRequest();
+        requestSender = CreateWebSender(getterURL, testData);
+
+        asyncRequest = requestSender.SendWebRequest();
+        while (!asyncRequest.isDone)
+            await Task.Delay(100);
 
         if (requestSender.isNetworkError || requestSender.isHttpError)
         {
@@ -88,12 +88,6 @@ public class HttpRequest : MonoBehaviour
         {
             Debug.Log("Upload Completed!");
         }
+        return requestSender.downloadHandler.text;
     }
-
-    //Parse Test Object to Json Format
-    private string JsonParser(TestDataPlaceHolder obj)
-    {
-        return JsonUtility.ToJson(obj);
-    }
-
 }
