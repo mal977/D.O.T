@@ -314,6 +314,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startGameButton: {fileID: 718948229}
   animationController: {fileID: 1411975017}
+  login_username_textfield: {fileID: 1997588163}
+  login_password_textfield: {fileID: 654960839}
+  login_button: {fileID: 1406967594}
+  create_email_textfield: {fileID: 1236913471}
+  create_username_textfield: {fileID: 980303400}
+  create_password_textfield: {fileID: 2056989055}
+  create_password_confirm_textfield: {fileID: 1813719543}
+  create_address_textfield: {fileID: 2019679657}
+  create_phonen_number_textfield: {fileID: 659312600}
+  create_button: {fileID: 168895148}
 --- !u!4 &94506136
 Transform:
   m_ObjectHideFlags: 0
@@ -419,7 +429,7 @@ GameObject:
   - component: {fileID: 133113940}
   - component: {fileID: 133113939}
   m_Layer: 5
-  m_Name: Text
+  m_Name: username_text_login
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1686,7 +1696,7 @@ GameObject:
   - component: {fileID: 721544249}
   - component: {fileID: 721544248}
   m_Layer: 5
-  m_Name: Text
+  m_Name: password_text_login
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2723,7 +2733,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Sign Up
+  m_Text: Create Account
 --- !u!222 &1158534324
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4513,7 +4523,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Password
+  m_Text: Phone Number
 --- !u!222 &2088172698
 CanvasRenderer:
   m_ObjectHideFlags: 0

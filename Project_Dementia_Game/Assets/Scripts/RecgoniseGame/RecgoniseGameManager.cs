@@ -75,7 +75,7 @@ public class RecgoniseGameManager : MonoBehaviour
 
     }
 
-    void endCurrentRound()
+    void EndCurrentRound()
     {
         timer = false;
         timerText.SetActive(false);
@@ -100,16 +100,18 @@ public class RecgoniseGameManager : MonoBehaviour
         sendingTestData.DateTimeCompleted = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         
         Debug.Log("Button clicked:" + DateTimeOffset.Now.ToUnixTimeMilliseconds());
+
+        //Send test data results to TMS, tms will send all data once all test games are completed.
         tms.AddTestData(sendingTestData);
     }
 
     void PopulateNewObject(RecgoniseObjects recgoniseObjects)
     {
         spriteRender.sprite = recgoniseObjects.ObjectIcon;
-        btn0Object.transform.GetChild(0).GetComponent<Text>().text = recgoniseObjects.Option1;
-        btn1Object.transform.GetChild(0).GetComponent<Text>().text = recgoniseObjects.Option2;
-        btn2Object.transform.GetChild(0).GetComponent<Text>().text = recgoniseObjects.Option3;
-        btn3Object.transform.GetChild(0).GetComponent<Text>().text = recgoniseObjects.Option4;
+        btn0Object.transform.GetChild(0).GetComponent<Text>().text = recgoniseObjects.Option0;
+        btn1Object.transform.GetChild(0).GetComponent<Text>().text = recgoniseObjects.Option1;
+        btn2Object.transform.GetChild(0).GetComponent<Text>().text = recgoniseObjects.Option2;
+        btn3Object.transform.GetChild(0).GetComponent<Text>().text = recgoniseObjects.Option3;
 
         btn0Object.GetComponent<Button>().interactable = true;
         btn1Object.GetComponent<Button>().interactable = true;
@@ -120,6 +122,7 @@ public class RecgoniseGameManager : MonoBehaviour
     void BtnOnClick(int number)
     {
         Debug.Log("Button clicked:" + number);
+        //Turn off all buttons to prevent user from spamming button
         btn0Object.GetComponent<Button>().interactable = false;
         btn1Object.GetComponent<Button>().interactable = false;
         btn2Object.GetComponent<Button>().interactable = false;
@@ -131,7 +134,7 @@ public class RecgoniseGameManager : MonoBehaviour
             sendingTestData.Score++;
             resultText.GetComponent<Text>().text = "Correct Answer!";
             resultText.SetActive(true);
-            endCurrentRound();
+            EndCurrentRound();
         }
         else
         {
@@ -139,7 +142,7 @@ public class RecgoniseGameManager : MonoBehaviour
             sendingTestData.Errors++;
             resultText.GetComponent<Text>().text = "Wrong Answer!";
             resultText.SetActive(true);
-            endCurrentRound();
+            EndCurrentRound();
         }
 
         if (numberOfRounds > 0)
