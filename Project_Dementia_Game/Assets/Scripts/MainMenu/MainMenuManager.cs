@@ -29,9 +29,15 @@ public class MainMenuManager : MonoBehaviour
     public GameObject create_phonen_number_textfield;
     public GameObject create_button;
 
+
+    [SerializeField]
+    Boolean stayOnLoginScreen = false;
+
     Animator m_Animator;
+    private HttpHelper httpHelper;
     void Start()
     {
+        httpHelper = HttpHelper.GetInstance();
 
         startGameButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => StartTests());
         create_button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => CreateAccount());
@@ -41,7 +47,9 @@ public class MainMenuManager : MonoBehaviour
 
         if (CheckForPlayerLoggedIn())
         {
+            
             Debug.Log("Current State" + m_Animator.GetCurrentAnimatorStateInfo(0).fullPathHash);
+            m_Animator.SetTrigger("login_close");
             m_Animator.SetTrigger("home_open");
         }
         else
@@ -52,7 +60,7 @@ public class MainMenuManager : MonoBehaviour
 
     void StartTests()
     {
-        SceneManager.LoadScene("RecgoniseGameScene");
+        //SceneManager.LoadScene("RecgoniseGameScene");
     }
 
     void Login()
@@ -61,10 +69,13 @@ public class MainMenuManager : MonoBehaviour
         String password = login_password_textfield.GetComponent<InputField>().text;
 
         Debug.Log("Username: " + username + " Password: " + password);
-
-        //if Login successful trigger transition to home screen
-        m_Animator.SetTrigger("login_close");
-        m_Animator.SetTrigger("home_open");
+        httpHelper.Login(username, password, () =>
+         {
+             //if Login successful trigger transition to home screen
+             m_Animator.SetTrigger("login_close");
+             m_Animator.SetTrigger("home_open");
+         });
+       
     }
 
     void CreateAccount()
@@ -87,7 +98,9 @@ public class MainMenuManager : MonoBehaviour
 
     Boolean CheckForPlayerLoggedIn()
     {
-        if (PlayerPrefs.HasKey("user_cookie"))
+        if (stayOnLoginScreen)
+            return false;
+        if (PlayerPrefs.HasKey(PlayerPrefsHelper.PREF_ACCESS_TOKEN))
         {
             return true;
         }
