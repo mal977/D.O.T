@@ -20,18 +20,22 @@ public class TestAPI : HttpRequest
     // Note: Patient ID will be stored as token (uid) in the unity persistentData once the login is verified
 
     // On start test: Get testID with patient uid
-    public string GetTrailMakingTestID(string uid) {
+    public void GetTrailMakingTestID(string uid) {
         // Need to reconfirm with HeFei, his confirmation not very clear
         string urlPath = "patient/uid/tests";
         var response = GetRequest(urlPath);
-        if (!string.IsNullOrEmpty(response.Result))
-        {
-            throw new Exception();
+
+        //if (!string.IsNullOrEmpty(response.ToString()))
+        //{
+        //    throw new Exception();
+        //}
+        //response.Wait();
+        for (int i = 0; i < 100; i++) { 
+            if(!response.IsCompleted)
+                Task.Delay(100);
         }
-        response.Wait();
-        while (!response.IsCompleted)
-            Task.Delay(100);
-        return response.Result;
+        Debug.Log(response);
+        //return response.Result;
     }
 
     // On second test: Get testID
