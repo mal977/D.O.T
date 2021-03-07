@@ -56,13 +56,17 @@ public class HttpHelper : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
+    /**
+     * @Author Malcom
+     * This Login Method attempts to login the account using the input email and password. If its successful, it calls the resolveAction input Action
+     * 
+     * TODO add a action for failure? Maybe
+     */
     public void Login(String inEmail, String inPassword, Action resolveAction)
     {
         string path = url + "api/auth/login";
         RestClient.Post<LoginResponse>(path, new LogInUser{ email = inEmail, password = inPassword }).Then(response =>
         {
-            // Very hacky here, the server sends the token data as one long string, cant parse as Json cause of the single quotes
-            // So i parse it to a string, replace the single quotes with double quotes to conform to Json standards, then parse it again
             EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
             PlayerPrefs.SetString(PlayerPrefsHelper.PREF_ACCESS_TOKEN, response.access_token);
             resolveAction();
@@ -70,9 +74,7 @@ public class HttpHelper : MonoBehaviour
             EditorUtility.DisplayDialog("Error", err.ToString(), "Ok");
             
         });
-
     }
-
 }
 
 [Serializable]
