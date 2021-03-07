@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DrawLine : MonoBehaviour
+public class DrawManager : MonoBehaviour
 {
 
     private LineRenderer lineRenderer;
+
+    public bool allowDraw = true;
 
     // Draw line properties
     public float lineStartWidth = 0.1f;
@@ -75,7 +77,7 @@ public class DrawLine : MonoBehaviour
     // One finger only draw lines and update screens
     void Update()
     {
-        if (Input.touchCount > 0)
+        if (Input.touchCount > 0 && allowDraw)
         {
             Touch touch = Input.GetTouch(0);
             HandleDrawLine(touch);
@@ -106,19 +108,18 @@ public class DrawLine : MonoBehaviour
 
     void HandleNodeCollision(Touch touch)
     {
+        if (touch.phase == TouchPhase.Ended)
+            allowEntry = true;
         RaycastHit2D hitInfo = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(touch.position), Vector2.zero);
         if (hitInfo)
         {
             timerInNode += Time.deltaTime;
             if (allowEntry)
             {
-                if (timerInNode >= getTestManager().minTimeInNode)
-                {
                     getTestManager().NotifyNodeHit(hitInfo.transform.gameObject, timerInNode);
                     //Debug.Log("Time taken in Node:" + timerInNode);
                     timerInNode = 0.0f;
                     allowEntry = false;
-                }
             }
             getTestManager().UpdateMistakeNodeHit(hitInfo.transform.gameObject, timerInNode);
         }

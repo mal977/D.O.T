@@ -7,6 +7,7 @@ public class GenerateNodes : MonoBehaviour
 {
     public GameObject nodePrefab;
     public GameObject testManager;
+    public bool isAlphabetMode = false;
 
     // Random Based Nodes
     public float nodeGap = 0.85f;
@@ -17,6 +18,7 @@ public class GenerateNodes : MonoBehaviour
     public GameObject[] nodes;
 
     private int numberNodes;
+    private string[] alphaNodes = { "1", "A", "2", "B", "3", "C", "4", "D", "5", "E", "6", "F", "7", "G", "8", "H", "9", "I", "10", "J" };
 
     // Node generation checker to determine the rules to avoid overlapping circles and also trail making viable positions
     private Vector2[] generateNodeCoordinates()
@@ -29,7 +31,6 @@ public class GenerateNodes : MonoBehaviour
         int counter = 1000;
         for (int j = 0; j < numberNodes; j++)
         {
-
             do
             {
                 xCoor = Random.Range(-generateWidth, generateWidth);
@@ -79,7 +80,10 @@ public class GenerateNodes : MonoBehaviour
         {
             nodes[nodeCounter] = Instantiate(nodePrefab, new Vector3(nodeCoor[nodesCount].x, nodeCoor[nodesCount].y, 1.0f), Quaternion.identity);
             nodes[nodeCounter].name = "" + (nodeCounter + 1);
-            nodes[nodeCounter].transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "" + (nodeCounter + 1);
+            if(!isAlphabetMode)
+                nodes[nodeCounter].transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "" + (nodeCounter + 1);
+            else
+                nodes[nodeCounter].transform.GetChild(0).GetChild(0).GetComponent<Text>().text = alphaNodes[nodeCounter];
             nodes[nodeCounter].transform.parent = gameObject.transform;
             nodeCounter++;
         }
