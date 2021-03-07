@@ -50,7 +50,6 @@ public class MainMenuManager : MonoBehaviour
         {
 
             Debug.Log("Current State" + m_Animator.GetCurrentAnimatorStateInfo(0).fullPathHash);
-            m_Animator.SetTrigger("login_close");
             m_Animator.SetTrigger("home_open");
         }
         else
