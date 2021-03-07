@@ -44,8 +44,8 @@ public class HttpRequest : MonoBehaviour
 
             if (webRequest.isNetworkError)
             {
-                Debug.Log(pages[page] + ": Error: " + webRequest.error);
-                return webRequest.error;
+                Debug.Log("error");
+                return "error";
             }
             else
             {
