@@ -1,5 +1,5 @@
+using Newtonsoft.Json;
 using Proyecto26;
-using RSG;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,9 +9,6 @@ using UnityEngine.Networking;
 
 public class HttpHelper : MonoBehaviour
 {
-   
-    private string token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ2NTgxMDc4LCJqdGkiOiIzM2U0ODU4ZTBiZDg0NDcxYjIzM2RmNGM1NDVmZTliMiIsInVzZXJfaWQiOjF9.g2cshvhfMZfU-w82dELwg9ypFbGc4WDSLPwXPwgnHZI";
-    
     private string url = "http://172.21.148.163/";
     private static HttpHelper instance;
     public static HttpHelper GetInstance()
@@ -25,11 +22,13 @@ public class HttpHelper : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //RestClient.DefaultRequestHeaders["Authorization"] = "Bearer " + token;
-        //RestClient.Post<CustomResponse>("http://172.21.148.163/api/patients/new-test/", null).Then(response =>
-        //{
-        //    EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
-        //});
+        if (PlayerPrefs.HasKey(PlayerPrefsConst.PREF_ACCESS_TOKEN))
+        {
+            //If a token already exists, use that token for API calls, set the token as default header
+            RestClient.DefaultRequestHeaders["Authorization"] = "Bearer " + PlayerPrefs.GetString(PlayerPrefsConst.PREF_ACCESS_TOKEN);
+
+        }
+
 
         // Handicap code to implement promises by myself @Malcom
         //PostPromise().Then(() => { EditorUtility.DisplayDialog("hwe", "Ewe", "Ok"); });
@@ -59,26 +58,97 @@ public class HttpHelper : MonoBehaviour
     /**
      * @Author Malcom
      * This Login Method attempts to login the account using the input email and password. If its successful, it calls the resolveAction input Action
+     * This method also saves access token in the player prefs
      * 
      * TODO add a action for failure? Maybe
      */
     public void Login(String inEmail, String inPassword, Action resolveAction)
     {
         string path = url + "api/auth/login";
-        RestClient.Post<LoginResponse>(path, new LogInUser{ email = inEmail, password = inPassword }).Then(response =>
+        RestClient.Post<LoginResponse>(path, new LogInUser { email = inEmail, password = inPassword }).Then(response =>
+         {
+             EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+             PlayerPrefs.SetString(PlayerPrefsConst.PREF_ACCESS_TOKEN, response.access_token);
+             RestClient.DefaultRequestHeaders["Authorization"] = "Bearer " + response.access_token;
+             resolveAction.Invoke();
+         }).Catch(err =>
+         {
+             EditorUtility.DisplayDialog("Error", err.ToString(), "Ok");
+         });
+    }
+
+    /**
+     * @Author Malcom
+     * This method starts a new test. Access token is added to the header. If successful, it calls the resolveAction input Action
+     * This method also saves the newTestId response from the server in player prefs.
+     */
+    public void StartNewTest(Action resolveAction)
+    {
+        string path = url + "api/patients/new-test/";
+        RestClient.Post<NewTestResponse>(path, null).Then(response =>
         {
             EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
-            PlayerPrefs.SetString(PlayerPrefsHelper.PREF_ACCESS_TOKEN, response.access_token);
-            resolveAction();
-        }).Catch(err =>{
-            EditorUtility.DisplayDialog("Error", err.ToString(), "Ok");
+            PlayerPrefs.SetString(PlayerPrefsConst.PREF_NEW_TEST_ID, response.new_test_id.ToString());
+            resolveAction.Invoke();
+        });
+    }
+
+
+    public void CreateNewAccount(Register register, Action resolveAction)
+    {
+        string path = url + "api/auth/register";
+   
+        RestClient.Post<RegisterResponse>(path, register).Then(response =>
+        {
+            resolveAction.Invoke();
+        }).Catch((err) =>
+        {
+            RequestException error = err as RequestException;
+            Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(error.Response);
+            Debug.Log("Error: " + err.Message);
             
+            //Somewhat hacky error message handling. ask @Malcom for more info
+            if(myDeserializedClass.errors.email != null)
+            {
+                foreach (string s in myDeserializedClass.errors.email)
+                {
+                    Debug.Log(s);
+                }
+            }
+            if (myDeserializedClass.errors.username!= null)
+            {
+                foreach (string s in myDeserializedClass.errors.username)
+                {
+                    Debug.Log(s);
+                }
+            }     
+            if(myDeserializedClass.errors.phone_number != null)
+            {
+                foreach (string s in myDeserializedClass.errors.phone_number)
+                {
+                    Debug.Log(s);
+                }
+            }
+            if (myDeserializedClass.errors.password!= null)
+            {
+                foreach (string s in myDeserializedClass.errors.password)
+                {
+                    Debug.Log(s);
+                }
+            }         
+            if (myDeserializedClass.errors.message!= null)
+            {
+                foreach (string s in myDeserializedClass.errors.message)
+                {
+                    Debug.Log(s);
+                }
+            }
         });
     }
 }
 
 [Serializable]
-public class CustomResponse
+public class NewTestResponse
 {
     public int user_id;
     public string user_name;
@@ -103,9 +173,42 @@ public class LoginResponse
     public string refresh_token;
 }
 
+[Serializable]
+public class Register
+{
+    public string email;
+    public string username;
+    public string password;
+    public string working_address;
+    public string phone_number;
+    public string user_role = "patient";
+}
+
+[Serializable]
+public class RegisterResponse
+{
+    public string email;
+    public string username;
+    public string working_address;
+    public string phone_number;
+}
+
+// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
+public class Errors
+{
+    public List<string> email { get; set; }
+    public List<string> username { get; set; }
+    public List<string> password { get; set; }
+    public List<string> phone_number { get; set; }
+    public List<string> message { get; set; }
+}
+
+public class Root
+{
+    public Errors errors { get; set; }
+}
+
 // Handicap code to implement promises by myself @Malcom
-
-
 enum States
 {
     PENDING = 0,
@@ -139,13 +242,13 @@ public class MPromise : MonoBehaviour
 
     }
 
-   
+
     public MPromise Then(Type func)
     {
         MPromise controlledPromise = new MPromise(func);
         this.thenQueue.Enqueue(controlledPromise);
 
-        if(this.state == States.FULFILLED)
+        if (this.state == States.FULFILLED)
         {
             this.propogateDone();
         }
