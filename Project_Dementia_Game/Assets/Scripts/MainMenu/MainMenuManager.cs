@@ -30,6 +30,7 @@ public class MainMenuManager : MonoBehaviour
     public GameObject create_button;
 
 
+    [Header("Debug Options")]
     [SerializeField]
     Boolean stayOnLoginScreen = false;
 
@@ -47,9 +48,8 @@ public class MainMenuManager : MonoBehaviour
 
         if (CheckForPlayerLoggedIn())
         {
-            
+
             Debug.Log("Current State" + m_Animator.GetCurrentAnimatorStateInfo(0).fullPathHash);
-            m_Animator.SetTrigger("login_close");
             m_Animator.SetTrigger("home_open");
         }
         else
@@ -60,6 +60,10 @@ public class MainMenuManager : MonoBehaviour
 
     void StartTests()
     {
+        httpHelper.StartNewTest(() =>
+        {
+
+        });
         //SceneManager.LoadScene("RecgoniseGameScene");
     }
 
@@ -75,7 +79,7 @@ public class MainMenuManager : MonoBehaviour
              m_Animator.SetTrigger("login_close");
              m_Animator.SetTrigger("home_open");
          });
-       
+
     }
 
     void CreateAccount()
@@ -91,16 +95,21 @@ public class MainMenuManager : MonoBehaviour
         String debugMessage = String.Format("Email: {0} Username: {1} Password: {2} PasswordConfirm: {3} Address: {4} PhoneNumber: {5}", email, username, password, password_confirm, address, phonen_number);
         Debug.Log(debugMessage);
 
-        //if CreateAccount successful trigger transition to log in screen
-        m_Animator.SetTrigger("create_account_close");
-        m_Animator.SetTrigger("login_open");
+
+        httpHelper.CreateNewAccount(
+            new Register { email = email, username = username, password = password, working_address = address, phone_number = phonen_number }, () =>
+            {
+                m_Animator.SetTrigger("create_account_close");
+                m_Animator.SetTrigger("login_open");
+            });
+
     }
 
     Boolean CheckForPlayerLoggedIn()
     {
         if (stayOnLoginScreen)
             return false;
-        if (PlayerPrefs.HasKey(PlayerPrefsHelper.PREF_ACCESS_TOKEN))
+        if (PlayerPrefs.HasKey(PlayerPrefsConst.PREF_ACCESS_TOKEN))
         {
             return true;
         }
