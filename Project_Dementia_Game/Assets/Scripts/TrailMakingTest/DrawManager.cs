@@ -73,8 +73,12 @@ public class DrawManager : MonoBehaviour
     {
         return gameObject.transform.parent.GetComponent<TMT_Manager>();
     }
-    // Update is called once per frame
-    // One finger only draw lines and update screens
+    /**
+     * @Author Nicholas
+     * Update handles line drawing and node collisions
+     * One finger is only allowed to draw lines and update screens
+     * 
+     */
     void Update()
     {
         if (Input.touchCount > 0 && allowDraw)

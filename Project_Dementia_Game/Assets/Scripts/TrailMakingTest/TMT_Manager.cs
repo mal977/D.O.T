@@ -60,7 +60,11 @@ public class TMT_Manager : MonoBehaviour
             sendingTestData = new TMTTestData();
         }
     }
-
+    /**
+     * @Author Nicholas
+     * This calculateAccuracy method calculate the current session node accuracy
+     * 
+     */
     private float calculateAccuracy() 
     {
         if (nodesMissed.Count > score)
@@ -72,19 +76,33 @@ public class TMT_Manager : MonoBehaviour
             return 0;
         return accuracy;
     }
-
+    /**
+     * @Author Nicholas
+     * This method is called in DrawManager to check if the error node touched beyond a certain buffer time
+     * This method allows user to draw past the nodes which are not the correct fast enough to the correct node
+     * The criteria for an error to happen:
+     * - score > 0
+     * - HitNode is same as the recorded error node
+     * - The current hitNode is not the node that is just been hit
+     * - ErrorMode is true => ErrorMode turns false when an error is triggered in this method
+     * - ErrorMode turns true when the correct node is hit
+     * 
+     */
     public void UpdateMistakeNodeHit(GameObject node, float timeHit)
     {
         int nodeID = int.Parse(node.name);
-        if (score != 0 && hitNode==nodeID && nodeID != previousNode && errorMode)
+        if (score > 0 && hitNode==nodeID && nodeID != previousNode && errorMode)
         {
-            //Debug.Log(string.Format("Duration In Node: {0}, BufferTiming: {1}", timeHit, bufferTimePastNode));
+            // When the user is in this node for longer than the time stated, error will trigger
             if (timeHit > bufferTimePastNode)
             {
+                // Error Feedbacks
                 audioSource.clip = wrongSound;
                 audioSource.Play();
                 node.GetComponent<SpriteRenderer>().color = new Color(1, 0, 0);
                 PreviousNodeBlinking();
+
+                //Update Error stats
                 errors++;
                 hitNode = 0;
                 errorMode = false;
@@ -99,12 +117,14 @@ public class TMT_Manager : MonoBehaviour
             nodesHit[nodesHit.Count - 1].GetComponent<NodeBehaviour>().StartBlinking();
     }
 
+    // Stops the node from blinking
     private void StopPreviousNodeBlink()
     {
         if(nodesHit.Count > 0)
             nodesHit[nodesHit.Count - 1].GetComponent<NodeBehaviour>().StopBlinking();
     }
 
+    // Clears the screen of nodes for after game ends
     private void EraseAllNodes()
     {
         foreach (GameObject l in nodesHit)
@@ -133,10 +153,13 @@ public class TMT_Manager : MonoBehaviour
             }
             else 
             {
+                // Records the node that is wrong, prepare for prolong error hit by user
                 hitNode = nodeID;
             }
         }
     }
+
+    // Records previous nodes missed to calculate accuracy
     private void generateNodeMissed(int nodeID)
     {
         for(int i = currentNode+1; i < nodeID; i++) 
@@ -150,6 +173,7 @@ public class TMT_Manager : MonoBehaviour
         audioSource.clip = winSound;
         audioSource.Play();
 
+        // Logs test data into test data package
         sendingTestData.Score = score;
         sendingTestData.Errors = errors;
         sendingTestData.TimeTaken = (long)(Mathf.Round(timer * 100.0f) / 100.0f);
@@ -160,6 +184,7 @@ public class TMT_Manager : MonoBehaviour
         //Send test data results to TMS, tms will send all data once all test games are completed.
         tms.AddTestData(sendingTestData);
 
+        // Turns off all the setting, clear the game screens and activate win screen
         if (isSceneTransitional) 
         {
             drawManager.allowDraw = false;
@@ -184,7 +209,12 @@ public class TMT_Manager : MonoBehaviour
         Application.Quit();
     }
 
-    // Update is called once per frame
+    /**
+     * @Author Nicholas
+     * Updates mainly control the game duration when the game starts and game end controls
+     * Constantly updates user game status
+     * 
+     */
     void Update()
     {
         if (score < numberNodes)
