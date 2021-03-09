@@ -42,4 +42,8 @@ public class TestManagerScript : MonoBehaviour
         testData.LogData();
     }
 
+    // TODO
+    // Save data into database/Player Prefs
+
+    // Load data from database/Player Prefs
 }
