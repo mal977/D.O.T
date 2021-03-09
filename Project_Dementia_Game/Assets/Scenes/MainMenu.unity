@@ -389,6 +389,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startGameButton: {fileID: 718948229}
+  exit_button: {fileID: 1401455604}
   animationController: {fileID: 1411975017}
   login_username_textfield: {fileID: 1997588163}
   login_password_textfield: {fileID: 654960839}
@@ -401,7 +402,6 @@ MonoBehaviour:
   create_phone_number_textfield: {fileID: 659312600}
   create_button: {fileID: 168895148}
   back_button: {fileID: 931554505}
-  exit_button: {fileID: 1401455604}
   stayOnLoginScreen: 0
 --- !u!4 &94506136
 Transform:
@@ -1188,7 +1188,7 @@ RectTransform:
   - {fileID: 1406967595}
   - {fileID: 356462011}
   m_Father: {fileID: 1411975021}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -3319,7 +3319,7 @@ RectTransform:
   m_Children:
   - {fileID: 980973917}
   m_Father: {fileID: 1411975021}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -4088,7 +4088,7 @@ RectTransform:
   m_Children:
   - {fileID: 1294971944}
   m_Father: {fileID: 1411975021}
-  m_RootOrder: 1
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -4392,11 +4392,11 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 13537164}
-  - {fileID: 1401455605}
   - {fileID: 1643956229}
   - {fileID: 594785664}
   - {fileID: 1428974879}
   - {fileID: 1159972477}
+  - {fileID: 1401455605}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4469,7 +4469,7 @@ RectTransform:
   - {fileID: 1439673418}
   - {fileID: 243745131}
   m_Father: {fileID: 1411975021}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -4693,7 +4693,7 @@ RectTransform:
   - {fileID: 718948230}
   - {fileID: 798071895}
   m_Father: {fileID: 1411975021}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
