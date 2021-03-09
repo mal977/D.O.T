@@ -10,6 +10,7 @@ public class MainMenuManager : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject startGameButton;
+    public GameObject exit_button;
 
     public GameObject animationController;
 
@@ -26,9 +27,9 @@ public class MainMenuManager : MonoBehaviour
     public GameObject create_password_textfield;
     public GameObject create_password_confirm_textfield;
     public GameObject create_address_textfield;
-    public GameObject create_phonen_number_textfield;
+    public GameObject create_phone_number_textfield;
     public GameObject create_button;
-
+    public GameObject back_button;
 
     [Header("Debug Options")]
     [SerializeField]
@@ -43,6 +44,8 @@ public class MainMenuManager : MonoBehaviour
         startGameButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => StartTests());
         create_button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => CreateAccount());
         login_button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => Login());
+        back_button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => BackToLogin());
+        exit_button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => ExitApp());
 
         m_Animator = animationController.GetComponent<Animator>();
 
@@ -62,9 +65,8 @@ public class MainMenuManager : MonoBehaviour
     {
         httpHelper.StartNewTest(() =>
         {
-
+            SceneManager.LoadScene("TMT", LoadSceneMode.Single);
         });
-        //SceneManager.LoadScene("RecgoniseGameScene");
     }
 
     void Login()
@@ -79,6 +81,8 @@ public class MainMenuManager : MonoBehaviour
              m_Animator.SetTrigger("login_close");
              m_Animator.SetTrigger("home_open");
          });
+        // Use MenuErrorFeedback Component to show error message
+        // GetComponent<MenuErrorFeedback>().DisplayError(errorMessageHere);
 
     }
 
@@ -90,19 +94,38 @@ public class MainMenuManager : MonoBehaviour
         String password = create_password_textfield.GetComponent<InputField>().text;
         String password_confirm = create_password_confirm_textfield.GetComponent<InputField>().text;
         String address = create_address_textfield.GetComponent<InputField>().text;
-        String phonen_number = create_phonen_number_textfield.GetComponent<InputField>().text;
+        String phone_number = create_phone_number_textfield.GetComponent<InputField>().text;
 
-        String debugMessage = String.Format("Email: {0} Username: {1} Password: {2} PasswordConfirm: {3} Address: {4} PhoneNumber: {5}", email, username, password, password_confirm, address, phonen_number);
+        String debugMessage = String.Format("Email: {0} Username: {1} Password: {2} PasswordConfirm: {3} Address: {4} PhoneNumber: {5}", email, username, password, password_confirm, address, phone_number);
         Debug.Log(debugMessage);
 
 
         httpHelper.CreateNewAccount(
-            new Register { email = email, username = username, password = password, working_address = address, phone_number = phonen_number }, () =>
+            new Register { email = email, username = username, password = password, working_address = address, phone_number = phone_number }, () =>
             {
                 m_Animator.SetTrigger("create_account_close");
                 m_Animator.SetTrigger("login_open");
             });
+        // Use MenuErrorFeedback Component to show error message
+        // GetComponent<MenuErrorFeedback>().DisplayError(errorMessageHere);
 
+    }
+
+    void BackToLogin() 
+    {
+        create_email_textfield.GetComponent<InputField>().text = "";
+        create_username_textfield.GetComponent<InputField>().text = "";
+        create_password_textfield.GetComponent<InputField>().text = "";
+        create_password_confirm_textfield.GetComponent<InputField>().text = "";
+        create_address_textfield.GetComponent<InputField>().text = "";
+        create_phone_number_textfield.GetComponent<InputField>().text = "";
+        m_Animator.SetTrigger("create_account_close");
+        m_Animator.SetTrigger("login_open");
+    }
+
+    void ExitApp()
+    {
+        Application.Quit();
     }
 
     Boolean CheckForPlayerLoggedIn()
