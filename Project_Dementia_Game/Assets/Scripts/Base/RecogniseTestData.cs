@@ -1,25 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class RecgoniseTestData : TestData
 {
 
-    private int id = 0;
-    private int score = 0;
-    private int errors = 0;
-    private long time_taken;     //Unix Milliseconds
-    private long date_time_completed;     //Unix Milliseconds
-    private long game_test_id = 1;     
+    [NonSerializedAttribute] private int id = 0;
+
+    public int score = 0;
+    public int errors = 0;
+    public long time_taken;     //Unix Milliseconds
+    public long date_time_completed;     //Unix Milliseconds
+
+    [NonSerializedAttribute] private long game_test_id = 1;     
 
     public int Score { get => score; set => score = value; }
     public int Errors { get => errors; set => errors = value; }
     public long TimeTaken { get => time_taken; set => time_taken = value; }
     public long DateTimeCompleted { get => date_time_completed; set => date_time_completed = value; }
 
-    public override void SendData()
+    public override void SendData(HttpHelper httpHelper)
     {
-
+        httpHelper.SendRecgoniseObjectData(this);
     } 
     public override void LogData()
     {

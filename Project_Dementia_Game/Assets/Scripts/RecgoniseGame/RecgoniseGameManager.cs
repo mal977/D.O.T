@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class RecgoniseGameManager : MonoBehaviour
@@ -103,6 +104,9 @@ public class RecgoniseGameManager : MonoBehaviour
 
         //Send test data results to TMS, tms will send all data once all test games are completed.
         tms.AddTestData(sendingTestData);
+
+        SceneManager.LoadScene("MainMenu");
+        tms.SendTestDataToServer();
     }
 
     void PopulateNewObject(RecgoniseObjects recgoniseObjects)

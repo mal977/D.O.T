@@ -2,10 +2,19 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+/**
+ * @Author Malcom
+ * 
+ * This class is responsible for the handling, saving and sending of TestData. 
+ * 
+ * Is is implemented as a static Singleton.
+ */
 public class TestManagerScript : MonoBehaviour
 {
-    private ArrayList testDataList = new ArrayList();
+    public static ArrayList testDataList = new ArrayList();
+    public static ArrayList errList = new ArrayList();
     private static TestManagerScript instance;
+    private static HttpHelper httpHelper;
 
     void Awake()
     {
@@ -13,6 +22,8 @@ public class TestManagerScript : MonoBehaviour
         {
             instance = new TestManagerScript();
         }
+        httpHelper = HttpHelper.GetInstance();
+
         DontDestroyOnLoad(this);
     }
 
@@ -25,6 +36,68 @@ public class TestManagerScript : MonoBehaviour
         return instance;
     }
 
+    /**
+     * @Author Malcom
+     * This method sends all test data to the server. For each testData in testDataList, it calls the SendData() method
+     */
+    public void SendTestDataToServer()
+    {
+        foreach(TestData testData in testDataList)
+        {
+            testData.SendData(httpHelper);
+        }
+    }
+
+    /**
+     * @Author Malcom
+     * This method is called by each individual testData once they have finished sending their data. When done, it removes itself from the testData list
+     * Once all testData is removed from the list, the FinishSendingAllData method is called.
+     * 
+     * TODO: we might still need the testData, so instead of removing, maybe move them to a completed list? - Malcom
+     * TODO: if data failed to send, prob save the data for future sending - Malcom
+     */
+    public static void FinishSendingData(TestData testData)
+    {
+        lock (testDataList)
+        {
+            foreach(TestData test in testDataList)
+            {
+                if (test.game_test_id == testData.game_test_id)
+                {
+                    testDataList.Remove(test);
+                    if (testDataList.Count <= 0)
+                    {
+                        FinishSendingAllData();
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * @Malcom
+     * This method is called once all test data is finished being sent. This is when the testDataList is empty
+     * 
+     * This method, will check if there are any errors produced during the sending, by checking if the errList is empty or not
+     * 
+     * If it is empty, this means all data was sent successfully.
+     * 
+     * If errors exist in the errList, then some http calls have failed
+     * 
+     * TODO: some ui handling here to inform user of results - Malcom
+     */
+    public static void FinishSendingAllData()
+    {
+        if (errList.Count > 0)
+        {
+            Debug.Log("Finish Sending All data, errors detected");
+        }
+        else
+        {
+            Debug.Log("Finish Sending All data");
+        }
+    }
     public void AddTestData(TestData testData)
     {
         testDataList.Add(testData);

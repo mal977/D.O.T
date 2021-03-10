@@ -65,7 +65,11 @@ public class MainMenuManager : MonoBehaviour
     {
         httpHelper.StartNewTest(() =>
         {
+            //Only if we are succesful in getting a new test id, then we can start the tests
             SceneManager.LoadScene("TMT", LoadSceneMode.Single);
+        },()=> { 
+            
+            //TODO: Add action when http fails here.
         });
     }
 

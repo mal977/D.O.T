@@ -81,8 +81,10 @@ public class HttpHelper : MonoBehaviour
      * @Author Malcom
      * This method starts a new test. Access token is added to the header. If successful, it calls the resolveAction input Action
      * This method also saves the newTestId response from the server in player prefs.
+     * 
+     * TODO: error checking for no code returned, someone could make a version which accepts an error action
      */
-    public void StartNewTest(Action resolveAction)
+    public void StartNewTest(Action resolveAction, Action errorAction)
     {
         string path = url + "api/patients/new-test/";
         RestClient.Post<NewTestResponse>(path, null).Then(response =>
@@ -90,10 +92,22 @@ public class HttpHelper : MonoBehaviour
             EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
             PlayerPrefs.SetString(PlayerPrefsConst.PREF_NEW_TEST_ID, response.new_test_id.ToString());
             resolveAction.Invoke();
+        }).Catch((err) =>
+        {
+            RequestException error = err as RequestException;
+            Debug.Log("Error: " + err.Message);
+            errorAction.Invoke();
         });
     }
 
-
+    /**
+     * @Author Malcom
+     * This method attempts to register a new account
+     * If successful, it will save the accss token in the player prefs. This application does not store the user's password
+     * This method's error handling is really handicap, limited by Unity Json parser and the response by the backend server
+     * 
+     * TODO: add birthday field
+     */
     public void CreateNewAccount(Register register, Action resolveAction)
     {
         string path = url + "api/auth/register";
@@ -145,7 +159,69 @@ public class HttpHelper : MonoBehaviour
             }
         });
     }
+
+    /**
+    * @Author Malcom
+    * This method attempts to send recgonise test data to backend
+    * If successful, the test data will be reflected in the database
+    * This method's error handling is really handicap, limited by Unity Json parser and the response by the backend server
+    * 
+    * TODO: why cant i get the response from the call, the value is updated correctly, the json fields are correct???
+    */
+    public void SendRecgoniseObjectData(RecgoniseTestData recgoniseTestData)
+    {
+        if(!PlayerPrefs.HasKey(PlayerPrefsConst.PREF_NEW_TEST_ID))
+        {
+            Debug.LogError("No Test ID!");
+        }
+        string path = url + "api/patients/tests/"+PlayerPrefs.GetString(PlayerPrefsConst.PREF_NEW_TEST_ID)+"/picture-object-matchs/";
+        RestClient.Post<RecgoniseObjectResponse>(path, recgoniseTestData).Then(response =>
+        {
+            // I have no idea why i cant get the response for this call. Everything checks out, and the value is reflected correctly in the server @Malcom
+            EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+        }).Catch((err) =>
+        {
+            RequestException error = err as RequestException;
+            TestManagerScript.errList.Add(error);
+            Debug.Log("Error: " + error.Response);
+
+        }).Finally(() => { TestManagerScript.FinishSendingData(recgoniseTestData); });
+    }
+
+   /**
+   * @Author Malcom
+   * This method attempts to send TMT test data to backend
+   * If successful, the test data will be reflected in the database
+   * This method's error handling is really handicap, limited by Unity Json parser and the response by the backend server
+   * 
+   * TODO: why cant i get the response from the call, the value is updated correctly, the json fields are correct???
+   */
+    public void SendTMTData(TMTTestData tmtTestData)
+    {
+        if (!PlayerPrefs.HasKey(PlayerPrefsConst.PREF_NEW_TEST_ID))
+        {
+            Debug.LogError("No Test ID!");
+        }
+        string path = url + "api/patients/tests/" + PlayerPrefs.GetString(PlayerPrefsConst.PREF_NEW_TEST_ID) + "/trail-makings/";
+        RestClient.Post<RecgoniseObjectResponse>(path, tmtTestData).Then(response =>
+        {
+            // I have no idea why i cant get the response for this call. Everything checks out, and the value is reflected correctly in the server @Malcom
+            EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+        }).Catch((err) =>
+        {
+            RequestException error = err as RequestException;
+            TestManagerScript.errList.Add(error);
+            Debug.Log("Error: " + error.Response);
+
+        }).Finally(()=> { TestManagerScript.FinishSendingData(tmtTestData); });
+    }
 }
+
+/**
+ * 
+ * Classes for Json Parsing
+ * 
+ */
 
 [Serializable]
 public class NewTestResponse
@@ -206,6 +282,17 @@ public class Errors
 public class Root
 {
     public Errors errors { get; set; }
+}
+
+[Serializable]
+public class RecgoniseObjectResponse
+{
+    public int id { get; set; }
+    public int score { get; set; }
+    public int errors { get; set; }
+    public int time_taken { get; set; }
+    public int date_time_completed { get; set; }
+    public int game_test_id { get; set; }
 }
 
 // Handicap code to implement promises by myself @Malcom
