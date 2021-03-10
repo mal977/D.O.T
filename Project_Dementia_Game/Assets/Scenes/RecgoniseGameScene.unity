@@ -517,7 +517,7 @@ MonoBehaviour:
   recgoniseObjectList:
   - {fileID: 11400000, guid: a0a73cf4be546354e9cbbcd2864a306e, type: 2}
   - {fileID: 11400000, guid: 36b064d0e4b31c24e9271cf7380ef5de, type: 2}
-  - {fileID: 11400000, guid: fe618c0a7e2618846819a5856bb2fa08, type: 2}
+  - {fileID: 11400000, guid: f6b2547a59924ac4686f8f17760c068b, type: 2}
   - {fileID: 11400000, guid: 2a72860dd095820418e920d127c979a0, type: 2}
   - {fileID: 11400000, guid: 05749f966acf4ce4facaffde3a98b39f, type: 2}
   sprite: {fileID: 0}
