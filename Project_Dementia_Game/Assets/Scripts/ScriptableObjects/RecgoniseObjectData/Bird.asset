@@ -15,9 +15,9 @@ MonoBehaviour:
   ObjectName: Blue Bird
   ObjectDescription: A cartoon blue bird
   objectIcon: {fileID: 21300000, guid: 6c512fa3ec7037848852db47f3a4d6b3, type: 3}
+  option0: Bird
   option1: Cat
   option2: Car
   option3: Dog
-  option4: Bird
-  correctOption: 3
+  correctOption: 0
   sourceURL: https://www.pngwing.com/en/free-png-bmeva/download
