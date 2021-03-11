@@ -3,7 +3,9 @@ using Proyecto26;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -67,13 +69,17 @@ public class HttpHelper : MonoBehaviour
         string path = url + "api/auth/login";
         RestClient.Post<LoginResponse>(path, new LogInUser { email = inEmail, password = inPassword }).Then(response =>
          {
+#if UNITY_EDITOR
              EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+#endif
              PlayerPrefs.SetString(PlayerPrefsConst.PREF_ACCESS_TOKEN, response.access_token);
              RestClient.DefaultRequestHeaders["Authorization"] = "Bearer " + response.access_token;
              resolveAction.Invoke();
          }).Catch(err =>
          {
+#if UNITY_EDITOR
              EditorUtility.DisplayDialog("Error", err.ToString(), "Ok");
+#endif
          });
     }
 
@@ -89,7 +95,9 @@ public class HttpHelper : MonoBehaviour
         string path = url + "api/patients/new-test/";
         RestClient.Post<NewTestResponse>(path, null).Then(response =>
         {
+#if UNITY_EDITOR
             EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+#endif
             PlayerPrefs.SetString(PlayerPrefsConst.PREF_NEW_TEST_ID, response.new_test_id.ToString());
             resolveAction.Invoke();
         }).Catch((err) =>
@@ -111,7 +119,7 @@ public class HttpHelper : MonoBehaviour
     public void CreateNewAccount(Register register, Action resolveAction)
     {
         string path = url + "api/auth/register";
-   
+
         RestClient.Post<RegisterResponse>(path, register).Then(response =>
         {
             resolveAction.Invoke();
@@ -120,37 +128,37 @@ public class HttpHelper : MonoBehaviour
             RequestException error = err as RequestException;
             Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(error.Response);
             Debug.Log("Error: " + err.Message);
-            
+
             //Somewhat hacky error message handling. ask @Malcom for more info
-            if(myDeserializedClass.errors.email != null)
+            if (myDeserializedClass.errors.email != null)
             {
                 foreach (string s in myDeserializedClass.errors.email)
                 {
                     Debug.Log(s);
                 }
             }
-            if (myDeserializedClass.errors.username!= null)
+            if (myDeserializedClass.errors.username != null)
             {
                 foreach (string s in myDeserializedClass.errors.username)
                 {
                     Debug.Log(s);
                 }
-            }     
-            if(myDeserializedClass.errors.phone_number != null)
+            }
+            if (myDeserializedClass.errors.phone_number != null)
             {
                 foreach (string s in myDeserializedClass.errors.phone_number)
                 {
                     Debug.Log(s);
                 }
             }
-            if (myDeserializedClass.errors.password!= null)
+            if (myDeserializedClass.errors.password != null)
             {
                 foreach (string s in myDeserializedClass.errors.password)
                 {
                     Debug.Log(s);
                 }
-            }         
-            if (myDeserializedClass.errors.message!= null)
+            }
+            if (myDeserializedClass.errors.message != null)
             {
                 foreach (string s in myDeserializedClass.errors.message)
                 {
@@ -170,15 +178,17 @@ public class HttpHelper : MonoBehaviour
     */
     public void SendRecgoniseObjectData(RecgoniseTestData recgoniseTestData)
     {
-        if(!PlayerPrefs.HasKey(PlayerPrefsConst.PREF_NEW_TEST_ID))
+        if (!PlayerPrefs.HasKey(PlayerPrefsConst.PREF_NEW_TEST_ID))
         {
             Debug.LogError("No Test ID!");
         }
-        string path = url + "api/patients/tests/"+PlayerPrefs.GetString(PlayerPrefsConst.PREF_NEW_TEST_ID)+"/picture-object-matchs/";
+        string path = url + "api/patients/tests/" + PlayerPrefs.GetString(PlayerPrefsConst.PREF_NEW_TEST_ID) + "/picture-object-matchs/";
         RestClient.Post<RecgoniseObjectResponse>(path, recgoniseTestData).Then(response =>
         {
             // I have no idea why i cant get the response for this call. Everything checks out, and the value is reflected correctly in the server @Malcom
+#if UNITY_EDITOR
             EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+#endif
         }).Catch((err) =>
         {
             RequestException error = err as RequestException;
@@ -188,14 +198,14 @@ public class HttpHelper : MonoBehaviour
         }).Finally(() => { TestManagerScript.FinishSendingData(recgoniseTestData); });
     }
 
-   /**
-   * @Author Malcom
-   * This method attempts to send TMT test data to backend
-   * If successful, the test data will be reflected in the database
-   * This method's error handling is really handicap, limited by Unity Json parser and the response by the backend server
-   * 
-   * TODO: why cant i get the response from the call, the value is updated correctly, the json fields are correct???
-   */
+    /**
+    * @Author Malcom
+    * This method attempts to send TMT test data to backend
+    * If successful, the test data will be reflected in the database
+    * This method's error handling is really handicap, limited by Unity Json parser and the response by the backend server
+    * 
+    * TODO: why cant i get the response from the call, the value is updated correctly, the json fields are correct???
+    */
     public void SendTMTData(TMTTestData tmtTestData)
     {
         if (!PlayerPrefs.HasKey(PlayerPrefsConst.PREF_NEW_TEST_ID))
@@ -206,14 +216,16 @@ public class HttpHelper : MonoBehaviour
         RestClient.Post<RecgoniseObjectResponse>(path, tmtTestData).Then(response =>
         {
             // I have no idea why i cant get the response for this call. Everything checks out, and the value is reflected correctly in the server @Malcom
+#if UNITY_EDITOR
             EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+#endif
         }).Catch((err) =>
         {
             RequestException error = err as RequestException;
             TestManagerScript.errList.Add(error);
             Debug.Log("Error: " + error.Response);
 
-        }).Finally(()=> { TestManagerScript.FinishSendingData(tmtTestData); });
+        }).Finally(() => { TestManagerScript.FinishSendingData(tmtTestData); });
     }
 }
 
