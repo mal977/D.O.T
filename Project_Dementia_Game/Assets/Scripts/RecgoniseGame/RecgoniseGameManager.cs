@@ -105,8 +105,7 @@ public class RecgoniseGameManager : MonoBehaviour
         //Send test data results to TMS, tms will send all data once all test games are completed.
         tms.AddTestData(sendingTestData);
 
-        SceneManager.LoadScene("MainMenu");
-        tms.SendTestDataToServer();
+        SceneManager.LoadScene("ScoreScreen");
     }
 
     void PopulateNewObject(RecgoniseObjects recgoniseObjects)

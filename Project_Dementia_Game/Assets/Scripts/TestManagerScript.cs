@@ -15,6 +15,7 @@ public class TestManagerScript : MonoBehaviour
     public static ArrayList errList = new ArrayList();
     private static TestManagerScript instance;
     private static HttpHelper httpHelper;
+    private static Action finishSendingAction;
 
     void Awake()
     {
@@ -40,9 +41,10 @@ public class TestManagerScript : MonoBehaviour
      * @Author Malcom
      * This method sends all test data to the server. For each testData in testDataList, it calls the SendData() method
      */
-    public void SendTestDataToServer()
+    public void SendTestDataToServer(Action action)
     {
-        foreach(TestData testData in testDataList)
+        finishSendingAction = action;
+        foreach (TestData testData in testDataList)
         {
             testData.SendData(httpHelper);
         }
@@ -96,6 +98,7 @@ public class TestManagerScript : MonoBehaviour
         else
         {
             Debug.Log("Finish Sending All data");
+            finishSendingAction.Invoke();
         }
     }
     public void AddTestData(TestData testData)
