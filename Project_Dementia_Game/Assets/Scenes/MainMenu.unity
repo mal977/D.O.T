@@ -8670,7 +8670,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
-<<<<<<< HEAD
 --- !u!224 &1643956229
 RectTransform:
   m_ObjectHideFlags: 0
