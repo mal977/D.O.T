@@ -64,13 +64,13 @@ public class HttpHelper : MonoBehaviour
      * 
      * TODO add a action for failure? Maybe
      */
-    public void Login(String inEmail, String inPassword, Action resolveAction)
+    public void Login(String inEmail, String inPassword, Action resolveAction, Action<string> errorAction)
     {
         string path = url + "api/auth/login";
         RestClient.Post<LoginResponse>(path, new LogInUser { email = inEmail, password = inPassword }).Then(response =>
          {
 #if UNITY_EDITOR
-             EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+             //EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
 #endif
              PlayerPrefs.SetString(PlayerPrefsConst.PREF_ACCESS_TOKEN, response.access_token);
              RestClient.DefaultRequestHeaders["Authorization"] = "Bearer " + response.access_token;
@@ -78,8 +78,9 @@ public class HttpHelper : MonoBehaviour
          }).Catch(err =>
          {
 #if UNITY_EDITOR
-             EditorUtility.DisplayDialog("Error", err.ToString(), "Ok");
+             //EditorUtility.DisplayDialog("Error", err.ToString(), "Ok");
 #endif
+             errorAction.Invoke("Username or password is incorrect!");
          });
     }
 
@@ -90,13 +91,13 @@ public class HttpHelper : MonoBehaviour
      * 
      * TODO: error checking for no code returned, someone could make a version which accepts an error action
      */
-    public void StartNewTest(Action resolveAction, Action errorAction)
+    public void StartNewTest(Action resolveAction, Action<string> errorAction)
     {
         string path = url + "api/patients/new-test/";
         RestClient.Post<NewTestResponse>(path, null).Then(response =>
         {
 #if UNITY_EDITOR
-            EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+            //EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
 #endif
             PlayerPrefs.SetString(PlayerPrefsConst.PREF_NEW_TEST_ID, response.new_test_id.ToString());
             resolveAction.Invoke();
@@ -104,7 +105,7 @@ public class HttpHelper : MonoBehaviour
         {
             RequestException error = err as RequestException;
             Debug.Log("Error: " + err.Message);
-            errorAction.Invoke();
+            errorAction.Invoke(err.Message);
         });
     }
 
@@ -116,18 +117,20 @@ public class HttpHelper : MonoBehaviour
      * 
      * TODO: add birthday field
      */
-    public void CreateNewAccount(Register register, Action resolveAction)
+    public void CreateNewAccount(Register register, Action resolveAction, Action<string> errorAction)
     {
         string path = url + "api/auth/register";
 
         RestClient.Post<RegisterResponse>(path, register).Then(response =>
         {
+            Debug.Log("Here");
             resolveAction.Invoke();
         }).Catch((err) =>
         {
             RequestException error = err as RequestException;
             Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(error.Response);
             Debug.Log("Error: " + err.Message);
+            string errorMessage = "";
 
             //Somewhat hacky error message handling. ask @Malcom for more info
             if (myDeserializedClass.errors.email != null)
@@ -165,6 +168,7 @@ public class HttpHelper : MonoBehaviour
                     Debug.Log(s);
                 }
             }
+            errorAction.Invoke(errorMessage);
         });
     }
 
@@ -187,7 +191,7 @@ public class HttpHelper : MonoBehaviour
         {
             // I have no idea why i cant get the response for this call. Everything checks out, and the value is reflected correctly in the server @Malcom
 #if UNITY_EDITOR
-            EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+            //EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
 #endif
         }).Catch((err) =>
         {
@@ -217,7 +221,7 @@ public class HttpHelper : MonoBehaviour
         {
             // I have no idea why i cant get the response for this call. Everything checks out, and the value is reflected correctly in the server @Malcom
 #if UNITY_EDITOR
-            EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+            //EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
 #endif
         }).Catch((err) =>
         {

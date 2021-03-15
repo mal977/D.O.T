@@ -67,9 +67,10 @@ public class MainMenuManager : MonoBehaviour
         {
             //Only if we are succesful in getting a new test id, then we can start the tests
             SceneManager.LoadScene("TMT", LoadSceneMode.Single);
-        },()=> { 
-            
+        },(errorMessage)=> {
+
             //TODO: Add action when http fails here.
+            GetComponent<MenuErrorFeedback>().DisplayError(errorMessage);
         });
     }
 
@@ -78,21 +79,26 @@ public class MainMenuManager : MonoBehaviour
         String username = login_username_textfield.GetComponent<InputField>().text;
         String password = login_password_textfield.GetComponent<InputField>().text;
 
+        if (username == "" || password == "")
+        {
+            GetComponent<MenuErrorFeedback>().DisplayError("Please fill in username and password!");
+            return;
+        }
+
         Debug.Log("Username: " + username + " Password: " + password);
         httpHelper.Login(username, password, () =>
          {
              //if Login successful trigger transition to home screen
              m_Animator.SetTrigger("login_close");
              m_Animator.SetTrigger("home_open");
+         }, (errorMessage) => {
+             GetComponent<MenuErrorFeedback>().DisplayError(errorMessage);
          });
-        // Use MenuErrorFeedback Component to show error message
-        // GetComponent<MenuErrorFeedback>().DisplayError(errorMessageHere);
 
     }
 
     void CreateAccount()
     {
-
         String email = create_email_textfield.GetComponent<InputField>().text;
         String username = create_username_textfield.GetComponent<InputField>().text;
         String password = create_password_textfield.GetComponent<InputField>().text;
@@ -100,6 +106,12 @@ public class MainMenuManager : MonoBehaviour
         String address = create_address_textfield.GetComponent<InputField>().text;
         String phone_number = create_phone_number_textfield.GetComponent<InputField>().text;
 
+
+        if (email == "" || username == "" || password == "" || password_confirm == "" || address == "" || phone_number == "") 
+        {
+            GetComponent<MenuErrorFeedback>().DisplayError("Please fill in all the blanks!");
+            return;
+        }
         String debugMessage = String.Format("Email: {0} Username: {1} Password: {2} PasswordConfirm: {3} Address: {4} PhoneNumber: {5}", email, username, password, password_confirm, address, phone_number);
         Debug.Log(debugMessage);
 
@@ -107,8 +119,11 @@ public class MainMenuManager : MonoBehaviour
         httpHelper.CreateNewAccount(
             new Register { email = email, username = username, password = password, working_address = address, phone_number = phone_number }, () =>
             {
+                Debug.Log("Account created");
                 m_Animator.SetTrigger("create_account_close");
                 m_Animator.SetTrigger("login_open");
+            }, (errorMessage)=> { 
+                
             });
         // Use MenuErrorFeedback Component to show error message
         // GetComponent<MenuErrorFeedback>().DisplayError(errorMessageHere);
