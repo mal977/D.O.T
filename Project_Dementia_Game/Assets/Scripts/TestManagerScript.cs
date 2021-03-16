@@ -98,6 +98,7 @@ public class TestManagerScript : MonoBehaviour
         else
         {
             Debug.Log("Finish Sending All data");
+            PlayerPrefs.DeleteKey(PlayerPrefsConst.PREF_NEW_TEST_ID);   //Remove existing test id from player prefs
             finishSendingAction.Invoke();
         }
     }

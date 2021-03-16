@@ -10,16 +10,18 @@ public class ResultSceneScript : MonoBehaviour
 {
     TestManagerScript tms;
     // Start is called before the first frame update
+    public const int NUMBER_OF_DAYS_FOR_NEXT_TEST = 7; 
 
     public GameObject ResultText;
     void Start()
     {
         tms = TestManagerScript.GetInstance();
 
-        ResultText.GetComponent<Text>().text = "He sending all data!";
+        ResultText.GetComponent<Text>().text = "Sending all data!";
         ScheduleNextTest();
 
         TMTTestData testData = new TMTTestData();
+        HttpHelper httpHelper = HttpHelper.GetInstance();
         testData.errors = 11;
         testData.score = 2;
         testData.TimeTaken = 1000;
@@ -42,13 +44,15 @@ public class ResultSceneScript : MonoBehaviour
         EditorUtility.DisplayDialog("Success", "Sucess sending all data!", "Ok");
 #endif
         ResultText.GetComponent<Text>().text = "Success sending all data!";
+        ScheduleNextTest();
     }
 
     void ScheduleNextTest()
     {
         if (Application.platform == RuntimePlatform.Android)
         {
-            ResultText.GetComponent<Text>().text = "Android sending all data!";
+            string placeholder = string.Format("All Data Sent Successfully! \nYour next test is scheduled for: {0} ", System.DateTime.Now.AddDays(NUMBER_OF_DAYS_FOR_NEXT_TEST).ToString("dddd MM yyyy"));
+            ResultText.GetComponent<Text>().text = placeholder;
 
             var c = new AndroidNotificationChannel()
             {
@@ -62,7 +66,7 @@ public class ResultSceneScript : MonoBehaviour
             var notification = new AndroidNotification();
             notification.Title = "Wellness check!";
             notification.Text = "Tap the notification to take your weekly wellness check!";
-            notification.FireTime = System.DateTime.Now.AddDays(1);
+            notification.FireTime = System.DateTime.Now.AddDays(NUMBER_OF_DAYS_FOR_NEXT_TEST);
             AndroidNotificationCenter.SendNotification(notification, "channel_id");
         }
     }
@@ -70,5 +74,15 @@ public class ResultSceneScript : MonoBehaviour
     public void ReturnToMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    /**
+     * @Author Malcom
+     * 
+     * TODO: something with the errors
+     */
+    public static void Errors_List(ArrayList errList)
+    {
+
     }
 }
