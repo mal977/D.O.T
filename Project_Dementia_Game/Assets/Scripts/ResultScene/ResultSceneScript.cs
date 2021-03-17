@@ -19,7 +19,7 @@ public class ResultSceneScript : MonoBehaviour
 
         ResultText.GetComponent<Text>().text = "Sending all data!";
         ScheduleNextTest();
-
+        tms.SaveTestData();
         TMTTestData testData = new TMTTestData();
         HttpHelper httpHelper = HttpHelper.GetInstance();
         testData.errors = 11;
@@ -44,6 +44,7 @@ public class ResultSceneScript : MonoBehaviour
         EditorUtility.DisplayDialog("Success", "Sucess sending all data!", "Ok");
 #endif
         ResultText.GetComponent<Text>().text = "Success sending all data!";
+        tms.ClearAllTestData();
         ScheduleNextTest();
     }
 

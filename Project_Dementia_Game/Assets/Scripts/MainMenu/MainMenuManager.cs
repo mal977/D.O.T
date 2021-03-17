@@ -31,6 +31,8 @@ public class MainMenuManager : MonoBehaviour
     public GameObject create_button;
     public GameObject back_button;
 
+    public GameObject main_menu_loading_icon;
+
     [Header("Debug Options")]
     [SerializeField]
     Boolean stayOnLoginScreen = false;
@@ -63,12 +65,15 @@ public class MainMenuManager : MonoBehaviour
 
     void StartTests()
     {
+        main_menu_loading_icon.SetActive(true);
         httpHelper.StartNewTest(() =>
         {
+            main_menu_loading_icon.SetActive(false);
             //Only if we are succesful in getting a new test id, then we can start the tests
             SceneManager.LoadScene("TMT", LoadSceneMode.Single);
         },(errorMessage)=> {
 
+            main_menu_loading_icon.SetActive(false);
             //TODO: Add action when http fails here.
             GetComponent<MenuErrorFeedback>().DisplayError(errorMessage);
         });
