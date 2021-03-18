@@ -109,7 +109,7 @@ public class TestManagerScript : MonoBehaviour
     }
 
     // Save and Test Datas are hard coded for player prefs saving method
-
+    // This is a super dumb way of saving test data btw - Malcom
     // Save data into database/Player Prefs
     public void SaveTestData()
     {

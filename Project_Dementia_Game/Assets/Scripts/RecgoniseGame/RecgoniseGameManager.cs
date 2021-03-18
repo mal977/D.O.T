@@ -76,10 +76,36 @@ public class RecgoniseGameManager : MonoBehaviour
 
     }
 
-    void EndCurrentRound()
+    void EndCurrentRound(bool correctAnswer)
     {
         timer = false;
         timerText.SetActive(false);
+
+        if (correctAnswer)
+        {
+            Debug.Log("Correct Answer!");
+            sendingTestData.Score++;
+            resultText.GetComponent<Text>().text = "Correct Answer!";
+            resultText.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("Wrong Answer!");
+            sendingTestData.Errors++;
+            resultText.GetComponent<Text>().text = "Wrong Answer!";
+            resultText.SetActive(true);
+        }
+
+        if (numberOfRounds > 0)
+        {
+            numberOfRounds--;
+            StartCoroutine(DelayStartNewRound());
+
+        }
+        else
+        {
+            EndGame();
+        }
     }
 
     void StartGame()
@@ -104,8 +130,7 @@ public class RecgoniseGameManager : MonoBehaviour
 
         //Send test data results to TMS, tms will send all data once all test games are completed.
         tms.AddTestData(sendingTestData);
-
-        SceneManager.LoadScene("ResultScreen");
+        StartCoroutine(DelayedLoadNextScene());
     }
 
     void PopulateNewObject(RecgoniseObjects recgoniseObjects)
@@ -133,37 +158,30 @@ public class RecgoniseGameManager : MonoBehaviour
        
         if (number == currentRecgoniseObject.CorrectOption)
         {
-            Debug.Log("Correct Answer!");
-            sendingTestData.Score++;
-            resultText.GetComponent<Text>().text = "Correct Answer!";
-            resultText.SetActive(true);
-            EndCurrentRound();
+           
+            EndCurrentRound(true);
         }
         else
         {
-            Debug.Log("Wrong Answer!");
-            sendingTestData.Errors++;
-            resultText.GetComponent<Text>().text = "Wrong Answer!";
-            resultText.SetActive(true);
-            EndCurrentRound();
-        }
-
-        if (numberOfRounds > 0)
-        {
-            numberOfRounds--;
-            StartCoroutine(DelayStartNewRound());
-
-        }
-        else
-        {
-            EndGame();
+          
+            EndCurrentRound(false);
         }
     }
     IEnumerator DelayStartNewRound()
     {
-      
         yield return new WaitForSeconds(lagTimeBetweenRound);
         StartNewRound();
+    }
+    IEnumerator DelayedLoadNextScene()
+    {
+        yield return new WaitForSeconds(lagTimeBetweenRound);
+        loadNextScene();
+    }
+
+    void loadNextScene()
+    {
+        SceneManager.LoadScene("ResultScreen");
+
     }
     // Update is called once per frame
     void Update()
@@ -172,6 +190,11 @@ public class RecgoniseGameManager : MonoBehaviour
         {
             timeAmount -= Time.deltaTime;
             timerText.GetComponent<Text>().text = string.Format("Time: {0}",Mathf.FloorToInt(timeAmount % 60));
+            if(timeAmount <= 0f)
+            {
+                EndCurrentRound(false);
+
+            }
         }
     }
 }
