@@ -11,7 +11,7 @@ public class TMTTestData : TestData
     public long time_taken;
     public long date_time_completed;
 
-    [NonSerializedAttribute] private long game_test_id = 0;
+    [NonSerializedAttribute] public long game_test_id = 0;
 
     public int Score { get => score; set => score = value; }
     public int Errors { get => errors; set => errors = value; }
