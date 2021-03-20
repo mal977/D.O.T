@@ -273,6 +273,7 @@ public class Register
     public string password;
     public string working_address;
     public string phone_number;
+    public string birth_date;
     public string user_role = "patient";
 }
 
