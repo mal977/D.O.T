@@ -15,6 +15,12 @@ public class TMT_Manager : MonoBehaviour
     private DrawManager drawManager;
 
     [SerializeField]
+    private GenerateNodes nodeManager;
+
+    [SerializeField]
+    private GameObject tutorialScreen;
+
+    [SerializeField]
     private AudioClip correctSound;
     [SerializeField]
     private AudioClip wrongSound;
@@ -27,6 +33,9 @@ public class TMT_Manager : MonoBehaviour
     private bool isSceneTransitional;
     [SerializeField]
     private GameObject winScreen;
+
+    [SerializeField]
+    private GameObject startArrow;
 
     private int currentNode = 1;
     private int hitNode = 0;
@@ -60,6 +69,13 @@ public class TMT_Manager : MonoBehaviour
             sendingTestData = new TMTTestData();
         }
     }
+
+    public void StartTestBtn()
+    {
+        tutorialScreen.SetActive(false);
+        nodeManager.gameObject.SetActive(true);
+    }
+
     /**
      * @Author Nicholas
      * This calculateAccuracy method calculate the current session node accuracy
@@ -96,11 +112,14 @@ public class TMT_Manager : MonoBehaviour
             // When the user is in this node for longer than the time stated, error will trigger
             if (timeHit > bufferTimePastNode)
             {
+                // Show Next Node with arrow on top
                 // Error Feedbacks
                 audioSource.clip = wrongSound;
                 audioSource.Play();
-                node.GetComponent<SpriteRenderer>().color = new Color(1, 0, 0);
-                PreviousNodeBlinking();
+                // Current node turns red for error
+                nodeManager.nodes[nodeID-1].GetComponent<SpriteRenderer>().color = new Color(1, 0, 0);
+                ShowArrowOnCurrentNode(currentNode-2);
+                NextNodeBlinking();
 
                 //Update Error stats
                 errors++;
@@ -110,18 +129,23 @@ public class TMT_Manager : MonoBehaviour
         }
     }
 
-    // When a mistake is made, the previous node will start blinking
-    private void PreviousNodeBlinking()
+    private void ShowArrowOnCurrentNode(int currentNodeID)
     {
-        if (nodesHit.Count > 0)
-            nodesHit[nodesHit.Count - 1].GetComponent<NodeBehaviour>().StartBlinking();
+        Vector2 nextNodePos = nodeManager.nodes[currentNodeID].transform.position;
+        startArrow.transform.position = new Vector2(nextNodePos.x, nextNodePos.y + 1.0f);
+        startArrow.SetActive(true);
+    }
+
+    // When a mistake is made, the previous node will start blinking
+    private void NextNodeBlinking()
+    {
+        nodeManager.nodes[nodesHit.Count].GetComponent<NodeBehaviour>().StartBlinking();
     }
 
     // Stops the node from blinking
-    private void StopPreviousNodeBlink()
+    private void StopNextNodeBlink()
     {
-        if(nodesHit.Count > 0)
-            nodesHit[nodesHit.Count - 1].GetComponent<NodeBehaviour>().StopBlinking();
+        nodeManager.nodes[nodesHit.Count].GetComponent<NodeBehaviour>().StopBlinking();
     }
 
     // Clears the screen of nodes for after game ends
@@ -141,8 +165,10 @@ public class TMT_Manager : MonoBehaviour
         {
             if (nodeID == currentNode)
             {
+                // Hide Tutorial Start Arrow
+                startArrow.SetActive(false);
                 errorMode = true;
-                StopPreviousNodeBlink();
+                StopNextNodeBlink();
                 audioSource.clip = correctSound;
                 audioSource.Play();
                 score++;
@@ -231,10 +257,11 @@ public class TMT_Manager : MonoBehaviour
                 EndGame();
             }    
         }
-        scoreText.text =
-            "Accuracy: " + Mathf.Round(calculateAccuracy() * 100.0f) / 100.0f +
-            "%\nScore: " + score + "\nMistakes: " + errors +
-            "\nTimer: " + Mathf.Round(timer * 100.0f) / 100.0f + "s";
+        //scoreText.text =
+        //    "Accuracy: " + Mathf.Round(calculateAccuracy() * 100.0f) / 100.0f +
+        //    "%\nScore: " + score + "\nMistakes: " + errors +
+        //    "\nTimer: " + Mathf.Round(timer * 100.0f) / 100.0f + "s";
+        scoreText.text = "Timer: " + Mathf.Round(timer * 100.0f) / 100.0f + "s";
 
     }
 
@@ -247,7 +274,7 @@ public class TMT_Manager : MonoBehaviour
         timer = 0;
         currentNode = 1;
         previousNode = 0;
-        scoreText.text = "Accuracy: 0.0%\nScore: 0\nMistakes: 0";
+        scoreText.text = "Timer: 0.00s";
         nodesMissed.Clear();
         nodesHit.Clear();
     }

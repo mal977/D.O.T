@@ -14,7 +14,7 @@ public class RecgoniseTestData : TestData
     public long time_taken;     //Unix Milliseconds
     public long date_time_completed;     //Unix Milliseconds
 
-    [NonSerializedAttribute] private long game_test_id = 1;     
+    [NonSerializedAttribute] public long game_test_id = 1;     
 
     public int Score { get => score; set => score = value; }
     public int Errors { get => errors; set => errors = value; }

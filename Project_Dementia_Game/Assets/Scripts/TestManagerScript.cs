@@ -109,7 +109,7 @@ public class TestManagerScript : MonoBehaviour
     }
 
     // Save and Test Datas are hard coded for player prefs saving method
-
+    // This is a super dumb way of saving test data btw - Malcom
     // Save data into database/Player Prefs
     public void SaveTestData()
     {
@@ -117,21 +117,27 @@ public class TestManagerScript : MonoBehaviour
         {
             if (testDataList[0] != null)
             {
-                TMTTestData tmtData = (TMTTestData)testDataList[0];
-                PlayerPrefs.SetInt("tmt_score", tmtData.Score);
-                PlayerPrefs.SetInt("tmt_errors", tmtData.Errors);
-                PlayerPrefs.SetString("tmt_time_taken", tmtData.TimeTaken.ToString());
-                PlayerPrefs.SetString("tmt_date_time_completed", tmtData.DateTimeCompleted.ToString());
-                PlayerPrefs.Save();
+                if (((TestData)testDataList[0]).game_test_id == 0)
+                {
+                    TMTTestData tmtData = (TMTTestData)testDataList[0];
+                    PlayerPrefs.SetInt("tmt_score", tmtData.Score);
+                    PlayerPrefs.SetInt("tmt_errors", tmtData.Errors);
+                    PlayerPrefs.SetString("tmt_time_taken", tmtData.TimeTaken.ToString());
+                    PlayerPrefs.SetString("tmt_date_time_completed", tmtData.DateTimeCompleted.ToString());
+                    PlayerPrefs.Save();
+                }
             }
             if (testDataList[1] != null)
             {
-                RecgoniseTestData recgoniseData = (RecgoniseTestData)testDataList[1];
-                PlayerPrefs.SetInt("recognise_score", recgoniseData.Score);
-                PlayerPrefs.SetInt("recognise_errors", recgoniseData.Errors);
-                PlayerPrefs.SetString("recognise_time_taken", recgoniseData.TimeTaken.ToString());
-                PlayerPrefs.SetString("recognise_date_time_completed", recgoniseData.DateTimeCompleted.ToString());
-                PlayerPrefs.Save();
+                if (((TestData)testDataList[0]).game_test_id == 1)
+                {
+                    RecgoniseTestData recgoniseData = (RecgoniseTestData)testDataList[1];
+                    PlayerPrefs.SetInt("recognise_score", recgoniseData.Score);
+                    PlayerPrefs.SetInt("recognise_errors", recgoniseData.Errors);
+                    PlayerPrefs.SetString("recognise_time_taken", recgoniseData.TimeTaken.ToString());
+                    PlayerPrefs.SetString("recognise_date_time_completed", recgoniseData.DateTimeCompleted.ToString());
+                    PlayerPrefs.Save();
+                }
             }
             if (testDataList.Count >= 2)
                 Debug.Log("Both tests data are saved");
