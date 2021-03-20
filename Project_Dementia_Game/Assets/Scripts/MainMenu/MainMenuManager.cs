@@ -28,6 +28,9 @@ public class MainMenuManager : MonoBehaviour
     public GameObject create_password_confirm_textfield;
     public GameObject create_address_textfield;
     public GameObject create_phone_number_textfield;
+    public GameObject create_birth_day_textfield;
+    public GameObject create_birth_month_textfield;
+    public GameObject create_birth_year_textfield;
     public GameObject create_button;
     public GameObject back_button;
 
@@ -46,7 +49,7 @@ public class MainMenuManager : MonoBehaviour
         startGameButton.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => StartTests());
         create_button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => CreateAccount());
         login_button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => Login());
-        back_button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => BackToLogin());
+        back_button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => ClearCreateAccountFields());
         exit_button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => ExitApp());
 
         m_Animator = animationController.GetComponent<Animator>();
@@ -110,6 +113,11 @@ public class MainMenuManager : MonoBehaviour
         String password_confirm = create_password_confirm_textfield.GetComponent<InputField>().text;
         String address = create_address_textfield.GetComponent<InputField>().text;
         String phone_number = create_phone_number_textfield.GetComponent<InputField>().text;
+        String birth_day = create_birth_day_textfield.GetComponent<InputField>().text;
+        String birth_month = create_birth_month_textfield.GetComponent<InputField>().text;
+        String birth_year = create_birth_year_textfield.GetComponent<InputField>().text;
+        //TODO Link your birthdates details here
+        Debug.Log(String.Format("Birth Date Registered: {0}/{1}/{2}", birth_day, birth_month, birth_year));
 
 
         if (email == "" || username == "" || password == "" || password_confirm == "" || address == "" || phone_number == "") 
@@ -125,6 +133,8 @@ public class MainMenuManager : MonoBehaviour
             new Register { email = email, username = username, password = password, working_address = address, phone_number = phone_number }, () =>
             {
                 Debug.Log("Account created");
+                ClearCreateAccountFields();
+                // TODO: Remember to remove the 2 statements in CreateAccountUI OnSignUpButtonPressed()
                 m_Animator.SetTrigger("create_account_close");
                 m_Animator.SetTrigger("login_open");
             }, (errorMessage)=> { 
@@ -135,7 +145,7 @@ public class MainMenuManager : MonoBehaviour
 
     }
 
-    void BackToLogin() 
+    void ClearCreateAccountFields() 
     {
         create_email_textfield.GetComponent<InputField>().text = "";
         create_username_textfield.GetComponent<InputField>().text = "";
@@ -143,8 +153,9 @@ public class MainMenuManager : MonoBehaviour
         create_password_confirm_textfield.GetComponent<InputField>().text = "";
         create_address_textfield.GetComponent<InputField>().text = "";
         create_phone_number_textfield.GetComponent<InputField>().text = "";
-        m_Animator.SetTrigger("create_account_close");
-        m_Animator.SetTrigger("login_open");
+        create_birth_day_textfield.GetComponent<InputField>().text = "01";
+        create_birth_month_textfield.GetComponent<InputField>().text = "01";
+        create_birth_year_textfield.GetComponent<InputField>().text = "1970";
     }
 
     void ExitApp()
@@ -164,11 +175,5 @@ public class MainMenuManager : MonoBehaviour
         {
             return false;
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

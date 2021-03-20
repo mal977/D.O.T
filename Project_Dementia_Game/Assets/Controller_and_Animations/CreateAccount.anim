@@ -22,7 +22,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -790
+        value: -805
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -30,17 +30,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.38333333
-        value: -45.87573
-        inSlope: 1382.7616
-        outSlope: 1382.7616
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.29677135
-      - serializedVersion: 3
         time: 0.5
-        value: 2.0000916
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -51,7 +42,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.x
-    path: CreateAccount
+    path: CreateAccountPanel
     classID: 224
     script: {fileID: 0}
   m_PPtrCurves: []
@@ -63,7 +54,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 3259465208
+      path: 241480031
       attribute: 1460864421
       script: {fileID: 0}
       typeID: 224
@@ -96,7 +87,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -790
+        value: -805
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -104,17 +95,8 @@ AnimationClip:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.38333333
-        value: -45.87573
-        inSlope: 1382.7616
-        outSlope: 1382.7616
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.29677135
-      - serializedVersion: 3
         time: 0.5
-        value: 2.0000916
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -125,7 +107,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_AnchoredPosition.x
-    path: CreateAccount
+    path: CreateAccountPanel
     classID: 224
     script: {fileID: 0}
   m_EulerEditorCurves: []
