@@ -117,6 +117,10 @@ public class MainMenuManager : MonoBehaviour
             GetComponent<MenuErrorFeedback>().DisplayError("Please fill in all the blanks!");
             return;
         }
+        if(password != password_confirm)
+        {
+            GetComponent<MenuErrorFeedback>().DisplayError("Passwords do not match!");
+        }
         String debugMessage = String.Format("Email: {0} Username: {1} Password: {2} PasswordConfirm: {3} Address: {4} PhoneNumber: {5}", email, username, password, password_confirm, address, phone_number);
         Debug.Log(debugMessage);
 
