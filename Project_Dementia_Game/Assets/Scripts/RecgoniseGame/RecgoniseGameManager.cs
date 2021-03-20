@@ -17,6 +17,8 @@ public class RecgoniseGameManager : MonoBehaviour
     public GameObject btn2Object;
     public GameObject btn3Object;
 
+    public GameObject infoPanel;
+
     public GameObject resultText;
     public GameObject timerText;
 
@@ -53,12 +55,9 @@ public class RecgoniseGameManager : MonoBehaviour
 
         spriteRender = spriteObject.GetComponent<Image>();
 
-        btn0Object.GetComponent<Button>().onClick.AddListener(()=>BtnOnClick(0));
-        btn1Object.GetComponent<Button>().onClick.AddListener(()=>BtnOnClick(1));
-        btn2Object.GetComponent<Button>().onClick.AddListener(()=>BtnOnClick(2));
-        btn3Object.GetComponent<Button>().onClick.AddListener(()=>BtnOnClick(3));
-
-        StartGame();
+        infoPanel.SetActive(true);
+        StartCoroutine(StartGame());
+        
     }
 
     void StartNewRound()
@@ -108,8 +107,19 @@ public class RecgoniseGameManager : MonoBehaviour
         }
     }
 
-    void StartGame()
+    IEnumerator StartGame()
     {
+        yield return new WaitForSeconds(3f);
+        timerText.SetActive(true);
+        spriteObject.SetActive(true);
+        btn0Object.SetActive(true);
+        btn1Object.SetActive(true);
+        btn2Object.SetActive(true);
+        btn3Object.SetActive(true);
+        btn0Object.GetComponent<Button>().onClick.AddListener(() => BtnOnClick(0));
+        btn1Object.GetComponent<Button>().onClick.AddListener(() => BtnOnClick(1));
+        btn2Object.GetComponent<Button>().onClick.AddListener(() => BtnOnClick(2));
+        btn3Object.GetComponent<Button>().onClick.AddListener(() => BtnOnClick(3));
         startTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         if (numberOfRounds > 0)
         {
