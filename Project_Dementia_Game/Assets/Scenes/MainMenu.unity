@@ -866,6 +866,7 @@ MonoBehaviour:
   create_birth_year_textfield: {fileID: 974194370}
   create_button: {fileID: 2123385504}
   back_button: {fileID: 1672622018}
+  create_success_panel: {fileID: 196239531}
   main_menu_loading_icon: {fileID: 1798231950}
   stayOnLoginScreen: 1
 --- !u!4 &94506136
