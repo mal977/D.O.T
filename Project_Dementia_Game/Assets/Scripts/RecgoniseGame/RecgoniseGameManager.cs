@@ -133,7 +133,7 @@ public class RecgoniseGameManager : MonoBehaviour
     {
         long endTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
-        sendingTestData.TimeTaken = endTime - startTime;
+        sendingTestData.TimeTaken = (endTime - startTime)/1000; // convert to seconds for backend team
         sendingTestData.DateTimeCompleted = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         
         Debug.Log("Button clicked:" + DateTimeOffset.Now.ToUnixTimeMilliseconds());
