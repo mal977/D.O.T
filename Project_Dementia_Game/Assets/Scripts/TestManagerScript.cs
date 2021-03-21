@@ -44,10 +44,10 @@ public class TestManagerScript : MonoBehaviour
     public void SendTestDataToServer(Action action)
     {
         finishSendingAction = action;
-        foreach (TestData testData in testDataList)
-        {
-            testData.SendData(httpHelper);
-        }
+        TestDataPackage testDataPackage = new TestDataPackage();
+        testDataPackage.trail_making = (TMTTestData)testDataList[0];
+        testDataPackage.picture_object_matching = (RecgoniseTestData)testDataList[1];
+        httpHelper.sendTestDatas(testDataPackage);
     }
 
     /**

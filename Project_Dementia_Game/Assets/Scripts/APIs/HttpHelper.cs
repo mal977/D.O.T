@@ -70,7 +70,7 @@ public class HttpHelper : MonoBehaviour
         RestClient.Post<LoginResponse>(path, new LogInUser { email = inEmail, password = inPassword }).Then(response =>
          {
 #if UNITY_EDITOR
-             //EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+             EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
 #endif
              PlayerPrefs.SetString(PlayerPrefsConst.PREF_ACCESS_TOKEN, response.access_token);
              RestClient.DefaultRequestHeaders["Authorization"] = "Bearer " + response.access_token;
@@ -78,7 +78,7 @@ public class HttpHelper : MonoBehaviour
          }).Catch(err =>
          {
 #if UNITY_EDITOR
-             //EditorUtility.DisplayDialog("Error", err.ToString(), "Ok");
+             EditorUtility.DisplayDialog("Error", err.ToString(), "Ok");
 #endif
              errorAction.Invoke("Username or password is incorrect!");
          });
@@ -97,7 +97,7 @@ public class HttpHelper : MonoBehaviour
         RestClient.Post<NewTestResponse>(path, null).Then(response =>
         {
 #if UNITY_EDITOR
-            //EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+            EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
 #endif
             PlayerPrefs.SetString(PlayerPrefsConst.PREF_NEW_TEST_ID, response.new_test_id.ToString());
             resolveAction.Invoke();
@@ -191,7 +191,7 @@ public class HttpHelper : MonoBehaviour
         {
             // I have no idea why i cant get the response for this call. Everything checks out, and the value is reflected correctly in the server @Malcom
 #if UNITY_EDITOR
-            //EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+            EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
 #endif
         }).Catch((err) =>
         {
@@ -221,7 +221,7 @@ public class HttpHelper : MonoBehaviour
         {
             // I have no idea why i cant get the response for this call. Everything checks out, and the value is reflected correctly in the server @Malcom
 #if UNITY_EDITOR
-            //EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+            EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
 #endif
         }).Catch((err) =>
         {
@@ -231,6 +231,28 @@ public class HttpHelper : MonoBehaviour
 
         }).Finally(() => { TestManagerScript.FinishSendingData(tmtTestData); });
     }
+
+    public void sendTestDatas(TestDataPackage testDataPackage)
+    {
+        if (!PlayerPrefs.HasKey(PlayerPrefsConst.PREF_NEW_TEST_ID))
+        {
+            Debug.LogError("No Test ID!");
+        }
+        string path = url + "api/patients/tests/" + PlayerPrefs.GetString(PlayerPrefsConst.PREF_NEW_TEST_ID) + "/results/";
+        RestClient.Post<RecgoniseObjectResponse>(path, testDataPackage).Then(response =>
+        {
+            // I have no idea why i cant get the response for this call. Everything checks out, and the value is reflected correctly in the server @Malcom
+#if UNITY_EDITOR
+            EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+#endif
+        }).Catch((err) =>
+        {
+            RequestException error = err as RequestException;
+            TestManagerScript.errList.Add(error);
+            Debug.Log("Error: " + error.Response);
+
+        }).Finally(() => { TestManagerScript.FinishSendingAllData(); });
+    }
 }
 
 /**
@@ -238,6 +260,13 @@ public class HttpHelper : MonoBehaviour
  * Classes for Json Parsing
  * 
  */
+[Serializable]
+public class TestDataPackage
+{
+    public TMTTestData trail_making;
+    public RecgoniseTestData picture_object_matching;
+}
+
 
 [Serializable]
 public class NewTestResponse

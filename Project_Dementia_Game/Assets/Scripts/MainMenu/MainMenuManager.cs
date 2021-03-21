@@ -74,6 +74,7 @@ public class MainMenuManager : MonoBehaviour
             main_menu_loading_icon.SetActive(false);
             //Only if we are succesful in getting a new test id, then we can start the tests
             SceneManager.LoadScene("TMT", LoadSceneMode.Single);
+            //SceneManager.LoadScene("ResultScreen", LoadSceneMode.Single);
         },(errorMessage)=> {
 
             main_menu_loading_icon.SetActive(false);
