@@ -141,7 +141,7 @@ public class MainMenuManager : MonoBehaviour
 
         httpHelper.CreateNewAccount(
             new Register { email = email, username = username, password = password, 
-                working_address = address, phone_number = phone_number, birth_date=String.Format("{0}-{1}-{2}", birth_year, birth_month, birth_day)}, () =>
+                working_address = address, phone_number = phone_number, birthday=String.Format("{0}-{1}-{2}", birth_year, birth_month, birth_day)}, () =>
             {
                 Debug.Log("Account created");
                 ClearCreateAccountFields();
