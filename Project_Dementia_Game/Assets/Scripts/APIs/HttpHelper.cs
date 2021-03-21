@@ -131,15 +131,18 @@ public class HttpHelper : MonoBehaviour
             Debug.Log("Error: " + err.Message);
             string errorMessage = "";
 
+            if(err.Message ==  "Cannot connect to destination host")
+                errorAction.Invoke("Cannot connect to destination host");
+
             //Somewhat hacky error message handling. ask @Malcom for more info
             if (myDeserializedClass.errors.email != null)
-            {
-                foreach (string s in myDeserializedClass.errors.email)
                 {
-                    Debug.Log(s);
-                    errorMessage += s;
+                    foreach (string s in myDeserializedClass.errors.email)
+                    {
+                        Debug.Log(s);
+                        errorMessage += s;
+                    }
                 }
-            }
             if (myDeserializedClass.errors.username != null)
             {
                 foreach (string s in myDeserializedClass.errors.username)
@@ -243,7 +246,7 @@ public class HttpHelper : MonoBehaviour
         {
             // I have no idea why i cant get the response for this call. Everything checks out, and the value is reflected correctly in the server @Malcom
 #if UNITY_EDITOR
-            EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+            //EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
 #endif
         }).Catch((err) =>
         {

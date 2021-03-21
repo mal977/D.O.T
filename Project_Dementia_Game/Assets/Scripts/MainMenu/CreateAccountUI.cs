@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class CreateAccountUI : MonoBehaviour
 {
     [SerializeField]
+    private Button signUpButton;
+    [SerializeField]
     private Button loginBtn;
     [SerializeField]
     private Button useridNextBtn;
@@ -15,8 +17,6 @@ public class CreateAccountUI : MonoBehaviour
     private Button phoneNextBtn;
     [SerializeField]
     private Button bdayBackBtn;
-    [SerializeField]
-    private Button signUpBtn;
     [SerializeField]
     private Animator createAccountAnimator;
     [SerializeField]
@@ -29,7 +29,6 @@ public class CreateAccountUI : MonoBehaviour
         phoneBackBtn.onClick.AddListener(() => OnPhoneBackButtonPressed());
         phoneNextBtn.onClick.AddListener(() => OnPhoneNextButtonPressed());
         bdayBackBtn.onClick.AddListener(() => OnBdayBackButtonPressed());
-        signUpBtn.onClick.AddListener(() => OnSignUpButtonPressed());
     }
 
     private void OnLoginButtonPressed()
@@ -58,7 +57,7 @@ public class CreateAccountUI : MonoBehaviour
         createAccountAnimator.SetTrigger("bday_to_phone");
     }
 
-    private void OnSignUpButtonPressed()
+    public void BackToLogin()
     {
         createAccountAnimator.SetTrigger("reset");
     }
@@ -72,6 +71,5 @@ public class CreateAccountUI : MonoBehaviour
     {
         createAccountAnimator.SetTrigger("bday_to_phone");
     }
-
 
 }

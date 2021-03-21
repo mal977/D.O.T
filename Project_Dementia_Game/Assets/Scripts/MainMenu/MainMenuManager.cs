@@ -34,7 +34,7 @@ public class MainMenuManager : MonoBehaviour
     public GameObject create_button;
     public GameObject back_button;
     public GameObject create_success_panel;
-
+    public GameObject creating_account_loading_panel;
     public GameObject main_menu_loading_icon;
 
     private float timer = 0;
@@ -121,9 +121,6 @@ public class MainMenuManager : MonoBehaviour
         String birth_day = create_birth_day_textfield.GetComponent<InputField>().text;
         String birth_month = create_birth_month_textfield.GetComponent<InputField>().text;
         String birth_year = create_birth_year_textfield.GetComponent<InputField>().text;
-        //TODO Link your birthdates details here
-        Debug.Log(String.Format("Birth Date Registered: {0}/{1}/{2}", birth_day, birth_month, birth_year));
-
 
         if (CreateAccountErrorChecks(email, username, password, password_confirm, address, phone_number))
             return;
@@ -131,11 +128,14 @@ public class MainMenuManager : MonoBehaviour
         String debugMessage = String.Format("Email: {0} Username: {1} Password: {2} PasswordConfirm: {3} Address: {4} PhoneNumber: {5}", email, username, password, password_confirm, address, phone_number);
         Debug.Log(debugMessage);
 
+        // Show Creating Account Buffer Panel
+        creating_account_loading_panel.SetActive(true);
         httpHelper.CreateNewAccount(
             new Register { email = email, username = username, password = password, 
                 working_address = address, phone_number = phone_number, birthday=String.Format("{0}-{1}-{2}", birth_year, birth_month, birth_day)}, () =>
             {
-                Debug.Log("Account created");
+                // Hide Loading Panel
+                creating_account_loading_panel.SetActive(false);
                 ClearCreateAccountFields();
                 // For fading success panel in Update method
                 isSuccess = true;
@@ -143,8 +143,24 @@ public class MainMenuManager : MonoBehaviour
                 m_Animator.SetTrigger("create_account_close");
                 m_Animator.SetTrigger("login_open");
             }, (errorMessage)=> {
+                // TODO: Error check for application not connected to server
                 GetComponent<MenuErrorFeedback>().DisplayError(errorMessage);
-                GetComponent<CreateAccountUI>().BackToUserID();
+                if (errorMessage == "Cannot connect to destination host")
+                {
+                    // Hide Loading Panel
+                    creating_account_loading_panel.SetActive(false);
+                    // This method simply return the create account to default animation state
+                    GetComponent<CreateAccountUI>().BackToLogin();
+                    ClearCreateAccountFields();
+                    m_Animator.SetTrigger("create_account_close");
+                    m_Animator.SetTrigger("login_open");
+                }
+                else
+                {
+                    // Hide Loading Panel
+                    creating_account_loading_panel.SetActive(false);
+                    GetComponent<CreateAccountUI>().BackToUserID();
+                }
             });
 
     }
