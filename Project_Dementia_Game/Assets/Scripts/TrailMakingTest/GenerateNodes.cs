@@ -5,6 +5,11 @@ using UnityEngine.UI;
 
 public class GenerateNodes : MonoBehaviour
 {
+    [SerializeField]
+    private float startArrow_yOffSet = 10.0f;
+    [SerializeField]
+    private GameObject startArrow;
+
     public GameObject nodePrefab;
     public GameObject testManager;
     public bool isAlphabetMode = false;
@@ -13,6 +18,7 @@ public class GenerateNodes : MonoBehaviour
     public float nodeGap = 0.85f;
     public float generateWidth = 2.0f;
     public float generateHeight = 4.0f;
+    public float yOffSet = 4.0f;
     public float nodeScale = 0.6f;
 
     public GameObject[] nodes;
@@ -34,7 +40,7 @@ public class GenerateNodes : MonoBehaviour
             do
             {
                 xCoor = Random.Range(-generateWidth, generateWidth);
-                yCoor = Random.Range(-generateHeight, generateHeight);
+                yCoor = Random.Range(-generateHeight+ yOffSet, generateHeight+ yOffSet);
                 isExist = false;
                 for (int i = 0; i < numberNodes; i++)
                 {
@@ -78,6 +84,8 @@ public class GenerateNodes : MonoBehaviour
         nodePrefab.transform.localScale = new Vector3(nodeScale, nodeScale, nodeScale);
         for (int nodesCount = 0; nodesCount < numberNodes; nodesCount++)
         {
+            if (nodesCount == 0)
+                ShowStartArrow(nodeCoor[nodesCount]);
             nodes[nodeCounter] = Instantiate(nodePrefab, new Vector3(nodeCoor[nodesCount].x, nodeCoor[nodesCount].y, 1.0f), Quaternion.identity);
             nodes[nodeCounter].name = "" + (nodeCounter + 1);
             if(!isAlphabetMode)
@@ -87,6 +95,12 @@ public class GenerateNodes : MonoBehaviour
             nodes[nodeCounter].transform.parent = gameObject.transform;
             nodeCounter++;
         }
+    }
+
+    private void ShowStartArrow(Vector2 firstNodePos)
+    {
+        startArrow.transform.position = new Vector3(firstNodePos.x, firstNodePos.y + startArrow_yOffSet, -1.0f); 
+        startArrow.SetActive(true);
     }
 
     // Start is called before the first frame update

@@ -11,11 +11,6 @@ public class BirthdayField : MonoBehaviour
     private int maxYear = 2010;
     [SerializeField]
     private int minYear = 1930;
-    [SerializeField]
-    private Button confirmBtn;
-    [SerializeField]
-    private Button backBtn;
-    public GameObject birthdayPanel;
 
     // DayUI
     [Header("Day Header")]
@@ -55,8 +50,6 @@ public class BirthdayField : MonoBehaviour
         dayText.text = AddZeroFrontDate(day);
         monthText.text = AddZeroFrontDate(month);
         yearText.text = year+"";
-        confirmBtn.onClick.AddListener(() =>ConfirmButton());
-        backBtn.onClick.AddListener(() => BackButton());
 
         dayUpBtn.onClick.AddListener(() => DayUpButton());
         //dayUpBtn.OnSelect(DayUpButton());
@@ -126,16 +119,6 @@ public class BirthdayField : MonoBehaviour
             year = maxYear;
 
         SetYearText();
-    }
-
-    public void ConfirmButton()
-    {
-        Debug.Log("Confirm!");
-    }
-
-    public void BackButton() 
-    {
-        birthdayPanel.SetActive(false);
     }
 
     public void DayDownButton() 
