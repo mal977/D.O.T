@@ -137,7 +137,7 @@ public class HttpHelper : MonoBehaviour
                 foreach (string s in myDeserializedClass.errors.email)
                 {
                     Debug.Log(s);
-                    errorMessage += "email";
+                    errorMessage += s;
                 }
             }
             if (myDeserializedClass.errors.username != null)
@@ -152,7 +152,6 @@ public class HttpHelper : MonoBehaviour
                 foreach (string s in myDeserializedClass.errors.phone_number)
                 {
                     Debug.Log(s);
-                    errorMessage += "phone";
                 }
             }
             if (myDeserializedClass.errors.password != null)
@@ -160,7 +159,6 @@ public class HttpHelper : MonoBehaviour
                 foreach (string s in myDeserializedClass.errors.password)
                 {
                     Debug.Log(s);
-                    errorMessage += "password";
                 }
             }
             if (myDeserializedClass.errors.message != null)
@@ -193,7 +191,7 @@ public class HttpHelper : MonoBehaviour
         {
             // I have no idea why i cant get the response for this call. Everything checks out, and the value is reflected correctly in the server @Malcom
 #if UNITY_EDITOR
-            EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+            //EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
 #endif
         }).Catch((err) =>
         {
@@ -223,7 +221,7 @@ public class HttpHelper : MonoBehaviour
         {
             // I have no idea why i cant get the response for this call. Everything checks out, and the value is reflected correctly in the server @Malcom
 #if UNITY_EDITOR
-            EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
+            //EditorUtility.DisplayDialog("Json", JsonUtility.ToJson(response, true), "Ok");
 #endif
         }).Catch((err) =>
         {

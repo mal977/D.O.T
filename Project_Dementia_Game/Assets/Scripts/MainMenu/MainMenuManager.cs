@@ -33,8 +33,12 @@ public class MainMenuManager : MonoBehaviour
     public GameObject create_birth_year_textfield;
     public GameObject create_button;
     public GameObject back_button;
+    public GameObject create_success_panel;
 
     public GameObject main_menu_loading_icon;
+
+    private float timer = 0;
+    private bool isSuccess = false;
 
     [Header("Debug Options")]
     [SerializeField]
@@ -121,21 +125,9 @@ public class MainMenuManager : MonoBehaviour
         Debug.Log(String.Format("Birth Date Registered: {0}/{1}/{2}", birth_day, birth_month, birth_year));
 
 
-        if (email == "" || username == "" || password == "" || password_confirm == "" || address == "" || phone_number == "") 
-        {
-            GetComponent<MenuErrorFeedback>().DisplayError("Please fill in all the blanks!");
-            if(email == "" || username == "" || password == "" || password_confirm == "")
-                GetComponent<CreateAccountUI>().BackToUserID();
-            else if(address == "" || phone_number == "")
-                GetComponent<CreateAccountUI>().BackToPhone();
+        if (CreateAccountErrorChecks(email, username, password, password_confirm, address, phone_number))
             return;
-        }
-        if(password != password_confirm)
-        {
-            GetComponent<MenuErrorFeedback>().DisplayError("Passwords do not match!");
-            GetComponent<CreateAccountUI>().BackToUserID();
-            return;
-        }
+
         String debugMessage = String.Format("Email: {0} Username: {1} Password: {2} PasswordConfirm: {3} Address: {4} PhoneNumber: {5}", email, username, password, password_confirm, address, phone_number);
         Debug.Log(debugMessage);
 
@@ -145,23 +137,42 @@ public class MainMenuManager : MonoBehaviour
             {
                 Debug.Log("Account created");
                 ClearCreateAccountFields();
+                // For fading success panel in Update method
+                isSuccess = true;
+                create_success_panel.SetActive(true);
                 m_Animator.SetTrigger("create_account_close");
                 m_Animator.SetTrigger("login_open");
             }, (errorMessage)=> {
-
-
-                // If Error message contains user id error
-                //GetComponent<CreateAccountUI>().BackToUserID();
-                // If Error message contains password error
-                //GetComponent<CreateAccountUI>().BackToUserID();
-                // If Error message contains phone error
-                //GetComponent<CreateAccountUI>().BackToPhone();
-                // If Error message contains message error
-
+                GetComponent<MenuErrorFeedback>().DisplayError(errorMessage);
+                GetComponent<CreateAccountUI>().BackToUserID();
             });
-        // Use MenuErrorFeedback Component to show error message
-        // GetComponent<MenuErrorFeedback>().DisplayError(errorMessageHere);
 
+    }
+
+    private bool CreateAccountErrorChecks(string email, string username, string password, string password_confirm, string address, string phone_number) 
+    {
+        if (email == "" || username == "" || password == "" || password_confirm == "" || address == "" || phone_number == "")
+        {
+            GetComponent<MenuErrorFeedback>().DisplayError("Please fill in all the blanks!");
+            if (email == "" || username == "" || password == "" || password_confirm == "")
+                GetComponent<CreateAccountUI>().BackToUserID();
+            else if (address == "" || phone_number == "")
+                GetComponent<CreateAccountUI>().BackToPhone();
+            return true;
+        }
+        if (password != password_confirm)
+        {
+            GetComponent<MenuErrorFeedback>().DisplayError("Passwords do not match!");
+            GetComponent<CreateAccountUI>().BackToUserID();
+            return true;
+        }
+        if(password.Length < 3)
+        {
+            GetComponent<MenuErrorFeedback>().DisplayError("Your password must be at least 3 characters!");
+            GetComponent<CreateAccountUI>().BackToUserID();
+            return true;
+        }
+        return false;
     }
 
     void ClearCreateAccountFields() 
@@ -194,5 +205,19 @@ public class MainMenuManager : MonoBehaviour
         {
             return false;
         }
+    }
+
+    void Update()
+    {
+        if (isSuccess) 
+        {
+            timer += Time.deltaTime;
+            if (timer > 1.5)
+            {
+                create_success_panel.SetActive(false);
+                timer = 0;
+                isSuccess = false;
+            }
+        }    
     }
 }
