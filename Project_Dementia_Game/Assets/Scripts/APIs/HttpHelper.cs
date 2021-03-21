@@ -123,7 +123,6 @@ public class HttpHelper : MonoBehaviour
 
         RestClient.Post<RegisterResponse>(path, register).Then(response =>
         {
-            Debug.Log("Here");
             resolveAction.Invoke();
         }).Catch((err) =>
         {
@@ -138,6 +137,7 @@ public class HttpHelper : MonoBehaviour
                 foreach (string s in myDeserializedClass.errors.email)
                 {
                     Debug.Log(s);
+                    errorMessage += "email";
                 }
             }
             if (myDeserializedClass.errors.username != null)
@@ -152,6 +152,7 @@ public class HttpHelper : MonoBehaviour
                 foreach (string s in myDeserializedClass.errors.phone_number)
                 {
                     Debug.Log(s);
+                    errorMessage += "phone";
                 }
             }
             if (myDeserializedClass.errors.password != null)
@@ -159,6 +160,7 @@ public class HttpHelper : MonoBehaviour
                 foreach (string s in myDeserializedClass.errors.password)
                 {
                     Debug.Log(s);
+                    errorMessage += "password";
                 }
             }
             if (myDeserializedClass.errors.message != null)

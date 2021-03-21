@@ -124,15 +124,20 @@ public class MainMenuManager : MonoBehaviour
         if (email == "" || username == "" || password == "" || password_confirm == "" || address == "" || phone_number == "") 
         {
             GetComponent<MenuErrorFeedback>().DisplayError("Please fill in all the blanks!");
+            if(email == "" || username == "" || password == "" || password_confirm == "")
+                GetComponent<CreateAccountUI>().BackToUserID();
+            else if(address == "" || phone_number == "")
+                GetComponent<CreateAccountUI>().BackToPhone();
             return;
         }
         if(password != password_confirm)
         {
             GetComponent<MenuErrorFeedback>().DisplayError("Passwords do not match!");
+            GetComponent<CreateAccountUI>().BackToUserID();
+            return;
         }
         String debugMessage = String.Format("Email: {0} Username: {1} Password: {2} PasswordConfirm: {3} Address: {4} PhoneNumber: {5}", email, username, password, password_confirm, address, phone_number);
         Debug.Log(debugMessage);
-
 
         httpHelper.CreateNewAccount(
             new Register { email = email, username = username, password = password, 
@@ -140,11 +145,19 @@ public class MainMenuManager : MonoBehaviour
             {
                 Debug.Log("Account created");
                 ClearCreateAccountFields();
-                // TODO: Remember to remove the 2 statements in CreateAccountUI OnSignUpButtonPressed()
                 m_Animator.SetTrigger("create_account_close");
                 m_Animator.SetTrigger("login_open");
-            }, (errorMessage)=> { 
-                
+            }, (errorMessage)=> {
+
+
+                // If Error message contains user id error
+                //GetComponent<CreateAccountUI>().BackToUserID();
+                // If Error message contains password error
+                //GetComponent<CreateAccountUI>().BackToUserID();
+                // If Error message contains phone error
+                //GetComponent<CreateAccountUI>().BackToPhone();
+                // If Error message contains message error
+
             });
         // Use MenuErrorFeedback Component to show error message
         // GetComponent<MenuErrorFeedback>().DisplayError(errorMessageHere);

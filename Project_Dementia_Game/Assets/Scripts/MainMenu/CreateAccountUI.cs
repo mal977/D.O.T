@@ -61,9 +61,16 @@ public class CreateAccountUI : MonoBehaviour
     private void OnSignUpButtonPressed()
     {
         createAccountAnimator.SetTrigger("reset");
-        // TODO: These 2 statements shouldn't be handled by this component, but the main menu manager instead for error processing handling
-        mainMenuAnimator.SetTrigger("create_account_close");
-        mainMenuAnimator.SetTrigger("login_open");
+    }
+
+    public void BackToUserID()
+    {
+        createAccountAnimator.SetTrigger("bday_to_userid");
+    }
+
+    public void BackToPhone()
+    {
+        createAccountAnimator.SetTrigger("bday_to_phone");
     }
 
 
