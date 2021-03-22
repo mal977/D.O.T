@@ -272,9 +272,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Username
-
-'
+  m_Text: Emaill Address
 --- !u!222 &5041489
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -869,7 +867,7 @@ MonoBehaviour:
   create_success_panel: {fileID: 196239531}
   creating_account_loading_panel: {fileID: 1485360194}
   main_menu_loading_icon: {fileID: 1798231950}
-  stayOnLoginScreen: 1
+  stayOnLoginScreen: 0
 --- !u!4 &94506136
 Transform:
   m_ObjectHideFlags: 0
@@ -4773,7 +4771,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &798071895
 RectTransform:
   m_ObjectHideFlags: 0
