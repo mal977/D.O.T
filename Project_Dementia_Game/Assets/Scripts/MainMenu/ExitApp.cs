@@ -18,6 +18,6 @@ public class ExitApp : MonoBehaviour
 
     public void ExitGame()
     {
-        Application.Quit();
+        System.Diagnostics.Process.GetCurrentProcess().Kill();
     }
 }
