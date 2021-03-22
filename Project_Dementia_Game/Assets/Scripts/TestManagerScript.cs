@@ -185,7 +185,15 @@ public class TestManagerScript : MonoBehaviour
     // Clear data from database/Player Prefs
     public void ClearAllTestData()
     {
-        PlayerPrefs.DeleteAll();
+        PlayerPrefs.DeleteKey("tmt_score");
+        PlayerPrefs.DeleteKey("tmt_errors");
+        PlayerPrefs.DeleteKey("tmt_time_taken");
+        PlayerPrefs.DeleteKey("tmt_date_time_completed");
+        PlayerPrefs.DeleteKey("recognise_score");
+        PlayerPrefs.DeleteKey("recognise_errors");
+        PlayerPrefs.DeleteKey("recognise_time_taken");
+        PlayerPrefs.DeleteKey("recognise_date_time_completed");
+        PlayerPrefs.Save();
         testDataList.Clear();
         Debug.Log("All data are cleared from player prefs and in application");
     }
